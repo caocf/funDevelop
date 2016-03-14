@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.fundevelop</groupId>
-    <artifactId>framework</artifactId>
+    <artifactId>fundevelop</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>快速开发框架</name>
+    <name>快速开发基础</name>
     <description>定义底层架构的依赖组件及基础实现</description>
 
     <!-- 开发者 -->
@@ -50,9 +50,9 @@
 
     <modules>
         <!--
-        <module>fundevelop-framework</module>
         <module>fundevelop-commons</module>
         -->
+        <module>framework</module>
     </modules>
 
     <!-- 设定仓库,按设定顺序进行查找. -->
