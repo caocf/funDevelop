@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <description>Redis 配置</description>
+
+    <context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
+                                  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties,${env.application.file}" />
+
+    <!-- Redis 资源池配置  -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+    	<property name="maxIdle" value="${redis.jedisPoolConfig.maxIdle}"/>
+    	<property name="maxTotal" value="${redis.jedisPoolConfig.maxTotal}"/>
+    	<property name="maxWaitMillis" value="${redis.jedisPoolConfig.maxWaitMillis}"/>
+    	<property name="testOnBorrow" value="${redis.jedisPoolConfig.testOnBorrow}"/>
+    </bean>
+    
+    <!-- Redis 服务器配置  -->
+    <bean id="jedis.shardInfoCache1" class="redis.clients.jedis.JedisShardInfo">
+    	<constructor-arg index="0" value="${jedis.host}" />
+    	<constructor-arg index="1" type="int" value="${jedis.port}" />
+    	<constructor-arg index="2" value="redisService:${jedis.host}:${jedis.port}" />
+    </bean>
+    
+    <!-- Redis 资源池  -->
+    <bean id="shardedJedisPoolCache" class="redis.clients.jedis.ShardedJedisPool">
+    	<constructor-arg index="0" ref="jedisPoolConfig" />
+    	<constructor-arg index="1">
+    		<list>
+    			<ref bean="jedis.shardInfoCache1" />
+    		</list>
+    	</constructor-arg>
+    </bean>
+</beans>

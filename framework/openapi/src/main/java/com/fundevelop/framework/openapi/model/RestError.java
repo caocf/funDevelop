@@ -1,5 +1,7 @@
 package com.fundevelop.framework.openapi.model;
 
+import com.fundevelop.framework.openapi.exception.RestException;
+
 /**
  * Rest响应错误对象
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/3/14 19:16
@@ -9,6 +11,11 @@ public class RestError {
     private Object errorInfo;
 
     public RestError() {}
+
+    public RestError(RestException re) {
+        this.errorCode = re.getErrorCode();
+        this.errorInfo = re.getErrorInfo();
+    }
 
     public RestError(Object errorInfo) {
         this.errorInfo = errorInfo;

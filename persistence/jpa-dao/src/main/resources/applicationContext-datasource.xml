@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <description>数据源配置</description>
+
+    <context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
+                                  location="classpath*:/application.properties,${env.application.file}" />
+    <!-- 读写分离数据源 -->
+    <bean name="dataSource" class="com.fundevelop.persistence.datasource.ReadAndWriteSeparateLazyConnectionDataSourceProxy">
+        <property name="master" ref="dataSourceMaster" />
+        <property name="slave" ref="dataSourceSlave" />
+    </bean>
+
+    <!-- 数据源配置 -->
+    <bean id="dataSourceMaster" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.master.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <!-- 开启监控 -->
+        <property name="filters" value="stat" />
+
+        <property name="maxActive" value="${jdbc.pool.maxActive}" />
+        <property name="initialSize" value="${jdbc.pool.initialSize}" />
+        <property name="maxWait" value="${jdbc.pool.maxWait}" />
+        <property name="minIdle" value="${jdbc.pool.minIdle}" />
+
+        <!-- 连接Idle半个小时后超时，每15分钟检查一次 -->
+        <property name="timeBetweenEvictionRunsMillis" value="900000" />
+        <property name="minEvictableIdleTimeMillis" value="1800000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxOpenPreparedStatements" value="200" />
+    </bean>
+
+    <bean id="dataSourceSlave" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.slave.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <!-- 开启监控 -->
+        <property name="filters" value="stat" />
+
+        <property name="maxActive" value="${jdbc.pool.maxActive}" />
+        <property name="initialSize" value="${jdbc.pool.initialSize}" />
+        <property name="maxWait" value="${jdbc.pool.maxWait}" />
+        <property name="minIdle" value="${jdbc.pool.minIdle}" />
+
+        <!-- 连接Idle半个小时后超时，每15分钟检查一次 -->
+        <property name="timeBetweenEvictionRunsMillis" value="900000" />
+        <property name="minEvictableIdleTimeMillis" value="1800000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxOpenPreparedStatements" value="200" />
+    </bean>
+</beans>

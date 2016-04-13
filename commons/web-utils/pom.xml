@@ -3,37 +3,34 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>framework</artifactId>
+        <artifactId>commons</artifactId>
         <groupId>fundevelop</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fundevelop.framework</groupId>
-    <artifactId>openapi</artifactId>
+    <groupId>fundevelop.commons</groupId>
+    <artifactId>web-utils</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>快速开发::框架::OpenApi</name>
+    <name>快速开发::工具辅助::Web-Utils</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
 
-        <!-- framework -->
-        <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
-
         <!-- web -->
         <servlet-api.version>2.5</servlet-api.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+
+        <!-- commons -->
+        <fundevelop-commons-utils.version>1.0.0-SNAPSHOT</fundevelop-commons-utils.version>
+
+        <!-- Spring versions -->
+        <spring.version>4.1.1.RELEASE</spring.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>fundevelop.framework</groupId>
-            <artifactId>service-base</artifactId>
-            <version>${fundevelop-framework-service-base.version}</version>
-        </dependency>
-
         <!-- web begin -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -48,5 +45,26 @@
             <scope>provided</scope>
         </dependency>
         <!-- web end -->
+
+        <!-- commons begin -->
+        <dependency>
+            <groupId>fundevelop.commons</groupId>
+            <artifactId>utils</artifactId>
+            <version>${fundevelop-commons-utils.version}</version>
+        </dependency>
+        <!-- commons end -->
+
+        <!-- spring basic -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- spring end -->
     </dependencies>
 </project>

@@ -1,7 +1,5 @@
 package com.fundevelop.framework.openapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

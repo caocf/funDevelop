@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.fundevelop</groupId>
+    <groupId>fundevelop</groupId>
     <artifactId>fundevelop</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -21,11 +21,9 @@
     </developers>
 
     <scm>
-        <!--
-        <connection>scm:git:git@git.xiaomashijia.com:dajiama/dajiama-arch.git</connection>
-        <url>scm:git:git@git.xiaomashijia.com:dajiama/dajiama-arch.git</url>
-        <developerConnection>scm:git:git@git.xiaomashijia.com:dajiama/dajiama-arch.git</developerConnection>
-        -->
+        <connection>scm:https://github.com/funDevelop/funDevelop.git</connection>
+        <url>scm:https://github.com/funDevelop/funDevelop.git</url>
+        <developerConnection>scm:https://github.com/funDevelop/funDevelop.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -49,53 +47,41 @@
     </properties>
 
     <modules>
-        <!--
-        <module>fundevelop-commons</module>
-        -->
+        <module>commons</module>
+        <module>persistence</module>
         <module>framework</module>
+        <module>cache</module>
     </modules>
 
     <!-- 设定仓库,按设定顺序进行查找. -->
     <repositories>
-        <!--
         <repository>
-            <id>dajiama</id>
-            <name>Dajiama Repository</name>
-            <url>http://maven.xiaomashijia.com/nexus/content/groups/public</url>
+            <id>zwlx</id>
+            <name>zwlx Repository</name>
+            <url>http://123.59.151.192:8081/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        -->
     </repositories>
 
     <!-- 设定团队持续集成发布包服务器 -->
     <distributionManagement>
-        <!--
         <repository>
-            <id>dajiama-release</id>
+            <id>zwlx-release</id>
             <name>Team Nexus Release Repository</name>
-            <url>http://maven.xiaomashijia.com/nexus/content/repositories/releases</url>
+            <url>http://123.59.151.192:8081/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>dajiama-snapshots</id>
+            <id>zwlx-snapshots</id>
             <name>Team Nexus Snapshot Repository</name>
-            <url>http://maven.xiaomashijia.com/nexus/content/repositories/snapshots</url>
+            <url>http://123.59.151.192:8081/nexus/content/repositories/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
-        -->
     </distributionManagement>
 
     <!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
     <dependencyManagement>
-        <dependencies>
-            <!-- framework -->
-            <dependency>
-                <groupId>com.fundevelop</groupId>
-                <artifactId>framework</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-            </dependency>
-        </dependencies>
     </dependencyManagement>
 
     <!-- 插件配置 -->

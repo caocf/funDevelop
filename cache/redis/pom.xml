@@ -3,17 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>framework</artifactId>
+        <artifactId>cache</artifactId>
         <groupId>fundevelop</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fundevelop.framework</groupId>
-    <artifactId>openapi</artifactId>
+    <groupId>fundevelop.cache</groupId>
+    <artifactId>redis</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>快速开发::框架::OpenApi</name>
+    <name>快速开发::缓存::Redis</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,8 +22,9 @@
         <!-- framework -->
         <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
 
-        <!-- web -->
-        <servlet-api.version>2.5</servlet-api.version>
+        <!-- cache -->
+        <jedis.version>2.7.2</jedis.version>
+
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
     </properties>
 
@@ -34,19 +35,17 @@
             <version>${fundevelop-framework-service-base.version}</version>
         </dependency>
 
-        <!-- web begin -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>${servlet-api.version}</version>
-            <scope>provided</scope>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- web end -->
     </dependencies>
 </project>

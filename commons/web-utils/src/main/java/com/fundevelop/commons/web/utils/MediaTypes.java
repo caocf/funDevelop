@@ -1,4 +1,4 @@
-package com.fundevelop.framework.openapi.utils;
+package com.fundevelop.commons.web.utils;
 
 /**
  * 带UTF-8 charset 定义的MediaType.
