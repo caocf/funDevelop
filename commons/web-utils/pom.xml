@@ -24,6 +24,7 @@
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 
         <!-- commons -->
+        <commons-httpclient.version>3.1</commons-httpclient.version>
         <fundevelop-commons-utils.version>1.0.0-SNAPSHOT</fundevelop-commons-utils.version>
 
         <!-- Spring versions -->
@@ -47,6 +48,16 @@
         <!-- web end -->
 
         <!-- commons begin -->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>${commons-httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.4</version>
+        </dependency>
         <dependency>
             <groupId>fundevelop.commons</groupId>
             <artifactId>utils</artifactId>

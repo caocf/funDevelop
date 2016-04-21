@@ -42,6 +42,17 @@ public class SpringContextHolder implements ServletContextListener {
     /**
      * 从Spring中获取Bean.
      */
+    public static <T> T getBean(Class<T> requiredType) {
+        if (ctx == null) {
+            throw new IllegalStateException("applicaitonContext未注入，等待应用启动完成后再进行调用");
+        }
+
+        return ctx.getBean(requiredType);
+    }
+
+    /**
+     * 从Spring中获取Bean.
+     */
     public static Object getBean(String beanName) {
         if (ctx == null) {
             throw new IllegalStateException("applicaitonContext未注入，等待应用启动完成后再进行调用");

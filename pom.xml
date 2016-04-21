@@ -51,6 +51,7 @@
         <module>persistence</module>
         <module>framework</module>
         <module>cache</module>
+        <module>plugin</module>
     </modules>
 
     <!-- 设定仓库,按设定顺序进行查找. -->

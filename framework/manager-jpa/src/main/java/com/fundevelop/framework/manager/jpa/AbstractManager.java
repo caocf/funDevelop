@@ -117,6 +117,25 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
      * @param spec 查询条件，参照{@link Specification}
      * @return 符合条件的实体数
      */
+    public long count(List<SearchFilter> filters){
+        return count(SearchUtils.buildSpecification(filters, (Class<T>)entityClazz));
+    }
+
+    /**
+     * 获取实体记录数.
+     * @param spec 查询条件，参照{@link Specification}
+     * @return 符合条件的实体数
+     */
+    public long count(SearchFilter...filters){
+        List<SearchFilter> filtersList = Arrays.asList(filters);
+        return count(filtersList);
+    }
+
+    /**
+     * 获取实体记录数.
+     * @param spec 查询条件，参照{@link Specification}
+     * @return 符合条件的实体数
+     */
     public long count(Specification<T> spec){
         Assert.notNull(spec, "查询条件不能为空");
         return getDao().count(spec);

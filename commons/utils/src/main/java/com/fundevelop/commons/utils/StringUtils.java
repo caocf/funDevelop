@@ -1,5 +1,7 @@
 package com.fundevelop.commons.utils;
 
+import java.util.Map;
+
 /**
  * 字符串工具类.
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/4/11 11:37
@@ -35,6 +37,51 @@ public class StringUtils {
             sb.append(string);
         }
         return sb.toString();
+    }
+
+    /**
+     * 使用<code>params</code>中的参数替换<code>source</code>中的参数符号.
+     * @param source 待替换的字符串
+     * @param params 参数集合
+     * @return 替换后字符串
+     */
+    public static String replaceConstant(String source, Map<String, String> params) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(source)) {
+            return org.apache.commons.lang3.StringUtils.EMPTY;
+        }
+
+        if (params != null && !params.isEmpty()) {
+            for (String key : params.keySet()) {
+                source = org.apache.commons.lang3.StringUtils.replace(source, "{"+key+"}", params.get(key));
+            }
+        }
+
+        return source;
+    }
+
+    /**
+     * 隐藏信息，将<code>source</code>中的字符替换成*.
+     * @param source 源字符串
+     * @param startPos 起始位置
+     * @param length 替换字符长度
+     * @return 替换后字符串
+     */
+    public static String hidenInfo(String source, int startPos, int length) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(source)) {
+            source = source.trim();
+
+            if (source.length() > startPos) {
+                String pre = source.substring(0, startPos);
+
+                if (source.length() > (startPos+length)) {
+                    source = pre + batchCreateString("*", length) + source.substring(startPos+length);
+                } else {
+                    source = pre + batchCreateString("*", source.length()- startPos);
+                }
+            }
+        }
+
+        return source;
     }
 
     private StringUtils(){}

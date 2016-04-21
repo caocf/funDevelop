@@ -47,8 +47,7 @@ public class ResponseUtils {
         RestError error;
 
         if (ex instanceof RestException) {
-            RestException re = (RestException) ex;
-            error = new RestError(ex);
+            error = new RestError((RestException) ex);
         } else {
             error = new RestError(500, "服务器开小差了~~~");
         }

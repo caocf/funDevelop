@@ -18,7 +18,13 @@ public class RestError {
     }
 
     public RestError(Object errorInfo) {
-        this.errorInfo = errorInfo;
+        if (errorInfo instanceof RestException) {
+            RestException re = (RestException) errorInfo;
+            this.errorCode = re.getErrorCode();
+            this.errorInfo = re.getErrorInfo();
+        } else {
+            this.errorInfo = errorInfo;
+        }
     }
 
     public RestError(int errorCode, Object errorInfo) {
