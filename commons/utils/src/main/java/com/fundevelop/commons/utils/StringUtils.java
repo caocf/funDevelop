@@ -1,5 +1,6 @@
 package com.fundevelop.commons.utils;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 
 /**
@@ -7,6 +8,55 @@ import java.util.Map;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/4/11 11:37
  */
 public class StringUtils {
+    /**
+     * 格式化价格.
+     */
+    public static String formatPrice(Double price) {
+        return formatPrice(price, "###,###.##");
+    }
+
+    /**
+     * 格式化价格.
+     */
+    public static String formatPrice(String price, String pattern) {
+        price = null2Empty(price);
+
+        if (org.apache.commons.lang3.StringUtils.isNumeric(price)) {
+            price = new DecimalFormat(pattern).format(Double.parseDouble(price));
+        } else if (!org.apache.commons.lang3.StringUtils.isEmpty(price)) {
+            String tmp = price;
+
+            try {
+                tmp = new DecimalFormat(pattern).format(Double.parseDouble(price));
+                price = tmp;
+            } catch (Exception ex) {}
+        }
+
+        return price;
+    }
+
+    /**
+     * 格式化价格.
+     */
+    public static String formatPrice(Double price, String pattern) {
+        if(price != null) {
+            return new DecimalFormat(pattern).format(price);
+        }
+
+        return "";
+    }
+
+    /**
+     * 如果传入字符串为null则输出空，否则原样返回.
+     */
+    public static String null2Empty(String str) {
+        if (str == null) {
+            return "";
+        }
+
+        return str;
+    }
+
     /**
      * 验证给定字符串是否为真.
      * <p>描述:true、1或on均表示为真</p>

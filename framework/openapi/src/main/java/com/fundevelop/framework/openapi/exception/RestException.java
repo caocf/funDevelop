@@ -12,7 +12,7 @@ public class RestException extends RuntimeException {
     private Object errorInfo;
 
     public RestException(int errorCode, Object errorInfo) {
-        super();
+        super(errorInfo==null?"":errorInfo.toString());
         this.errorCode= errorCode;
         this.errorInfo = errorInfo;
     }
@@ -24,13 +24,13 @@ public class RestException extends RuntimeException {
     }
 
     public RestException(Object errorInfo, Throwable cause) {
-        super(cause);
+        super(errorInfo==null?"":errorInfo.toString(), cause);
         this.errorCode = 500;
         this.errorInfo = errorInfo;
     }
 
     public RestException(int errorCode, Object errorInfo, Throwable cause) {
-        super(cause);
+        super(errorInfo==null?"":errorInfo.toString(), cause);
         this.errorCode = errorCode;
         this.errorInfo = errorInfo;
     }
