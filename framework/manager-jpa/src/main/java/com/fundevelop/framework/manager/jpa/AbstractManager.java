@@ -66,6 +66,10 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
         return getDao().findAll(spec, pageable);
     }
 
+    public Page<T> find(List<SearchFilter> filters, Pageable pageable) {
+        return find(SearchUtils.buildSpecification(filters, (Class<T>)entityClazz), pageable);
+    }
+
     /**
      * 排序查询.
      * @param spec 查询条件，参照{@link Specification}

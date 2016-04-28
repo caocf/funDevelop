@@ -12,7 +12,7 @@
     <description>数据库配置</description>
 
     <context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
-                                  location="classpath*:/application.properties,${env.application.file}" />
+                                  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties,${env.application.file}" />
 
 	<!-- Jpa Entity Manager 配置 -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

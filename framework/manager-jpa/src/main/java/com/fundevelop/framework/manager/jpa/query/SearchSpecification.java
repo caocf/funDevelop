@@ -2,16 +2,13 @@ package com.fundevelop.framework.manager.jpa.query;
 
 import com.fundevelop.commons.utils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.*;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 查询规格实现类.
@@ -109,10 +106,38 @@ public class SearchSpecification<T> implements Specification<T> {
                         predicates.add(builder.greaterThanOrEqualTo(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
                         break;
                     case IN:
-                        predicates.add(builder.in(expression).value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
+                        CriteriaBuilder.In in = builder.in(expression);
+
+                        if (filter.value.getClass().isArray()) {
+                            for (Object value : (Object[])filter.value) {
+                                in.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                            }
+                        } else if (filter.value instanceof  Collection) {
+                            for (Object value : (Collection)filter.value) {
+                                in.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                            }
+                        } else {
+                            in.value(filter.value);
+                        }
+
+                        predicates.add(in);
                         break;
                     case NI:
-                        predicates.add(builder.not(builder.in(expression).value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value))));
+                        CriteriaBuilder.In notin = builder.in(expression);
+
+                        if (filter.value.getClass().isArray()) {
+                            for (Object value : (Object[])filter.value) {
+                                notin.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                            }
+                        } else if (filter.value instanceof  Collection) {
+                            for (Object value : (Collection)filter.value) {
+                                notin.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                            }
+                        } else {
+                            notin.value(filter.value);
+                        }
+
+                        predicates.add(builder.not(notin));
                         break;
                     case CN:
                         predicates.add(builder.like(expression, "%" + filter.value + "%"));
