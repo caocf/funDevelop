@@ -12,6 +12,15 @@ public class Phone implements Serializable {
     /** 电话号码 */
     private String phone;
 
+    public Phone(String phone) {
+        this.phone = phone;
+    }
+
+    public Phone(String countryCode, String phone) {
+        this.countryCode = countryCode;
+        this.phone = phone;
+    }
+
     public String getCountryCode() {
         return countryCode;
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	   default-lazy-init="false">
+
+	<description>Quartz的定时集群任务配置</description>
+
+	<context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
+								  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties,${env.application.file}" />
+
+	<bean id="quartzDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${quartz.jdbc.driver}" />
+		<property name="url" value="${quartz.jdbc.url}" />
+		<property name="username" value="${quartz.jdbc.username}" />
+		<property name="password" value="${quartz.jdbc.password}" />
+
+		<property name="maxActive" value="${quartz.jdbc.pool.maxActive}" />
+		<property name="initialSize" value="${quartz.jdbc.pool.initialSize}" />
+		<property name="maxWait" value="${quartz.jdbc.pool.maxWait}" />
+		<property name="minIdle" value="${quartz.jdbc.pool.minIdle}" />
+	</bean>
+
+	<!-- 使用注解方式添加计划任务 -->
+	<bean id="JobsFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!--  quartz配置文件路径, 指向cluster配置 -->
+		<property name="configLocation" value="classpath:quartz-cluster.properties" />
+		<!-- 启动时延期60秒开始任务 -->
+		<property name="startupDelay" value="10" />
+		<property name="autoStartup" value="${quartz.autoStartup}"/>
+		<property name="schedulerName" value="${service.name}" />
+		<!-- 保存Job数据到数据库所需的数据源 -->
+		<property name="dataSource" ref="quartzDataSource" />
+		<!-- Job接受applicationContext的成员变量名 -->
+		<property name="applicationContextSchedulerContextKey" value="applicationContextKey" />
+	</bean>
+
+	<!-- 另一个事务管理器, Jdbc单数据源事务 -->
+	<bean id="quartzTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="quartzDataSource" />
+	</bean>
+</beans>

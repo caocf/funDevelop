@@ -1,7 +1,6 @@
 package com.fundevelop.plugin.sms;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 短信通道接口定义类.
@@ -11,15 +10,20 @@ public interface SmsChannel {
     /**
      * 发送短信.
      */
-    public boolean send(Sms sms);
+    public boolean sendSms(Sms sms);
 
     /**
      * 获取上行短信.
      */
-    public List<Map<String, String>> receive();
+    public List<ReceiveSms> getSms();
 
     /**
-     * 获取上行短信.
+     * 获取短信发送报告（回执）.
      */
-    public List<Map<String, String>> getSendReceipt();
+    public List<SmsReport> getSendReport();
+
+    /**
+     * 获取短信通道代码.
+     */
+    public String getChannelCode();
 }
