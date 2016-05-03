@@ -17,5 +17,6 @@
         <module>weixin</module>
         <module>ucloud</module>
         <module>sms</module>
+        <module>im/rongcloud</module>
     </modules>
 </project>
