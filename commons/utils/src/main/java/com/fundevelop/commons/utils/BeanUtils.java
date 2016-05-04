@@ -1,5 +1,6 @@
 package com.fundevelop.commons.utils;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ognl.OgnlOps;
@@ -89,6 +90,7 @@ public class BeanUtils {
                     mapper = new ObjectMapper();
                     mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
                     mapper.setTimeZone(TimeZone.getDefault());
+                    mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
                 }
             }
         }

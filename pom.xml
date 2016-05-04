@@ -58,9 +58,25 @@
     <!-- 设定仓库,按设定顺序进行查找. -->
     <repositories>
         <repository>
+            <id>dajiama</id>
+            <name>dajiama Repository</name>
+            <url>http://maven.xiaomashijia.com/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>zwlx</id>
             <name>zwlx Repository</name>
-            <url>http://123.59.151.192:8081/nexus/content/groups/public</url>
+            <url>http://maven.zaiwaixliuxue.com:8081/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>humming</id>
+            <name>humming Repository</name>
+            <url>http://maven.humming-tech.com:8081/nexus/content/groups/public</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -72,14 +88,25 @@
         <repository>
             <id>zwlx-release</id>
             <name>Team Nexus Release Repository</name>
-            <url>http://123.59.151.192:8081/nexus/content/repositories/releases</url>
+            <url>http://maven.zaiwaixliuxue.com:8081/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
             <id>zwlx-snapshots</id>
             <name>Team Nexus Snapshot Repository</name>
-            <url>http://123.59.151.192:8081/nexus/content/repositories/snapshots</url>
+            <url>http://maven.zaiwaixliuxue.com:8081/nexus/content/repositories/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
+        <!--<repository>-->
+            <!--<id>humming-release</id>-->
+            <!--<name>Team Nexus Release Repository</name>-->
+            <!--<url>http://maven.humming-tech.com:8081/nexus/content/repositories/releases</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+            <!--<id>humming-snapshots</id>-->
+            <!--<name>Team Nexus Snapshot Repository</name>-->
+            <!--<url>http://maven.humming-tech.com:8081/nexus/content/repositories/snapshots</url>-->
+            <!--<uniqueVersion>false</uniqueVersion>-->
+        <!--</snapshotRepository>-->
     </distributionManagement>
 
     <!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->

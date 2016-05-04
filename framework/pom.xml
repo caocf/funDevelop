@@ -18,5 +18,6 @@
         <module>manager-jpa</module>
         <module>service-base</module>
         <module>openapi</module>
+        <module>erp</module>
     </modules>
 </project>

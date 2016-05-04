@@ -1,5 +1,6 @@
 package com.fundevelop.framework.openapi.utils;
 
+import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.commons.web.utils.IpUtils;
 import com.fundevelop.framework.base.config.ServerConfUtils;
 import com.fundevelop.framework.openapi.exception.RestException;
@@ -9,6 +10,9 @@ import com.fundevelop.framework.openapi.model.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -65,10 +69,21 @@ public class ResponseUtils {
      */
     public static RestResponse successReturn(RestRequest restRequest, RestResponse response) {
         if (response == null) {
-            return handleException(restRequest, response, null);
+            return handleException(restRequest, restRequest!=null?createByRequest(restRequest):new RestResponse(), null);
         }
 
         return response;
+    }
+
+    /**
+     * 打印支持JSONP格式的结果.
+     * @throws java.io.IOException
+     */
+    public static void printJsonForJsonp(HttpServletResponse response, RestRequest restRequest, RestResponse restResponse) throws IOException {
+        PrintWriter out = response.getWriter();
+        String jsonString = BeanUtils.toJson(restResponse);
+        response.setContentType("text/javascript; charset=UTF-8");
+        out.print(restRequest.getCallback() + "(" + jsonString + ")");
     }
 
     private ResponseUtils(){}

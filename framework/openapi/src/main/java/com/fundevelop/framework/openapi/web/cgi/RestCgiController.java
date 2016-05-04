@@ -1,5 +1,8 @@
 package com.fundevelop.framework.openapi.web.cgi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.commons.utils.UuidGenerator;
 import com.fundevelop.commons.web.utils.IpUtils;
@@ -25,7 +28,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Restful cgi openapi总入口.
@@ -46,6 +53,33 @@ public class RestCgiController {
     }
 
     /**
+     * GET请求，支持JSONP.
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response) {
+        RestResponse restResponse = null;
+        RestRequest restRequest = null;
+
+        try {
+            restRequest = initRequest(request);
+
+            if (restRequest == null) {
+                throw new RuntimeException("从Get请求中获取请求参数失败");
+            }
+
+            restResponse = handleRequest(restRequest, request);
+        } catch (Exception ex) {
+            restResponse = ResponseUtils.handleException(restRequest, restResponse, ex);
+        }
+
+        try {
+            ResponseUtils.printJsonForJsonp(response, restRequest, restResponse);
+        } catch (IOException e) {
+            logger.error("使用Get请求将结果转换为jsonp输出失败", e);
+        }
+    }
+
+    /**
      * 处理POST请求.
      */
     @RequestMapping(method = RequestMethod.POST, produces = MediaTypes.JSON_UTF_8)
@@ -63,7 +97,7 @@ public class RestCgiController {
 
             // 处理命令异常
             if (StringUtils.isBlank(cmd)) {
-                RestError error = new RestError(500, "请求的命令不能为空");
+                RestError error = new RestError(412, "请求的命令不能为空");
                 response.setError(error);
                 return response;
             }
@@ -76,7 +110,7 @@ public class RestCgiController {
 
             // 拦截未知cmd
             if (invoker == null) {
-                RestError error = new RestError(404, "cmd not found in [" + ServerConfUtils.getConf().getServiceName() + "]");
+                RestError error = new RestError(410, "cmd not found in [" + ServerConfUtils.getConf().getServiceName() + "]");
                 response.setError(error);
                 return response;
             }
@@ -111,6 +145,56 @@ public class RestCgiController {
         } catch (Exception ex) {
             logger.warn("记录CGI请求日志出现异常", ex);
         }
+    }
+
+    /**
+     * 初始化请求.
+     */
+    private RestRequest initRequest(HttpServletRequest request) {
+        RestRequest restRequest = null;
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode objectNode = mapper.createObjectNode();
+            ObjectNode parameters = mapper.createObjectNode();
+
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            for (String key : parameterMap.keySet()) {
+                String[] values = parameterMap.get(key);
+
+                if (StringUtils.equals("_", key)) {
+                    continue;
+                }
+
+                // 特殊处理parameters
+                if (StringUtils.startsWith(key, "parameters")) {
+                    String newKey = key.replaceAll("parameters\\[", "").replaceAll("]", "");
+                    parameters.put(newKey, URLDecoder.decode(values[0], "UTF-8"));
+                    continue;
+                }
+
+                // 其他参数
+                if (values.length > 1) {
+                    ArrayNode arrayNode = mapper.createArrayNode();
+                    for (int i = 0; i < values.length; i++) {
+                        arrayNode.add(values[i]);
+                    }
+                    objectNode.set(key, arrayNode);
+                } else {
+                    String stringValue = URLDecoder.decode(values[0], "UTF-8");
+                    objectNode.put(key, stringValue);
+                }
+            }
+
+            objectNode.set("parameters", parameters);
+
+            restRequest = mapper.convertValue(objectNode, RestRequest.class);
+        } catch (Exception ex) {
+            logger.error("从Get请求中获取参数出错", ex);
+            throw new RuntimeException("从Get请求中获取参数出错", ex);
+        }
+
+        return restRequest;
     }
 
     /**

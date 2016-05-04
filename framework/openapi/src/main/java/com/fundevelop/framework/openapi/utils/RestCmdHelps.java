@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.commons.utils.ClassUtils;
+import com.fundevelop.commons.web.utils.PropertyUtil;
 import com.fundevelop.framework.base.listener.SpringContextHolder;
 import com.fundevelop.framework.openapi.annoations.RestCmdMapping;
 import com.fundevelop.framework.openapi.model.BaseRestRequest;
 import com.fundevelop.framework.openapi.model.RestRequest;
 import com.fundevelop.framework.openapi.utils.impl.CmdServiceInvokeDefaultImpl;
+import com.fundevelop.framework.openapi.utils.impl.CmdServiceInvokeStaticJsonImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,12 @@ public class RestCmdHelps extends InstantiationAwareBeanPostProcessorAdapter imp
             }
 
             return new CmdServiceInvokeDefaultImpl(SpringContextHolder.getBean(cmdService.getBeanName()), cmdService.getMethod(), methodParameters);
+        } else {
+            boolean runWidthStaticJson = com.fundevelop.commons.utils.StringUtils.isBooleanTrue(PropertyUtil.get("fun.openapi.switch.runWithStaticJson","false"));
+
+            if (runWidthStaticJson) {
+                return new CmdServiceInvokeStaticJsonImpl(request);
+            }
         }
 
         return null;

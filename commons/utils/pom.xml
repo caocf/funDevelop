@@ -21,6 +21,7 @@
 
         <!-- commons -->
         <commons-lang3.version>3.4</commons-lang3.version>
+        <commons-io.version>2.4</commons-io.version>
 
         <!-- asm -->
         <javassist.version>3.19.0-GA</javassist.version>
@@ -62,6 +63,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
         <!-- GENERAL UTILS end -->
 
