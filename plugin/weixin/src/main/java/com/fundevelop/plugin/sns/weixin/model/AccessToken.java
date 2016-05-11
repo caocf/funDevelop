@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 
 /**
- * 获取微信Access_token响应信息Bean.
+ * 获取微信（登录）Access_token响应信息Bean.
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/4/18 17:49
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

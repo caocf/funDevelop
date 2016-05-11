@@ -8,7 +8,7 @@
     <description>Redis 配置</description>
 
     <context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
-                                  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties,${env.application.file}" />
+                                  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties" />
 
     <!-- Redis 资源池配置  -->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
@@ -20,9 +20,7 @@
     
     <!-- Redis 服务器配置  -->
     <bean id="jedis.shardInfoCache1" class="redis.clients.jedis.JedisShardInfo">
-    	<constructor-arg index="0" value="${jedis.host}" />
-    	<constructor-arg index="1" type="int" value="${jedis.port}" />
-    	<constructor-arg index="2" value="redisService:${jedis.host}:${jedis.port}" />
+    	<constructor-arg index="0" value="redisService://${jedis.password}${jedis.host}:${jedis.port}" />
     </bean>
     
     <!-- Redis 资源池  -->

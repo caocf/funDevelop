@@ -9,7 +9,7 @@
 	<description>Quartz的定时集群任务配置</description>
 
 	<context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
-								  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties,${env.application.file}" />
+								  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties" />
 
 	<bean id="quartzDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="driverClassName" value="${quartz.jdbc.driver}" />

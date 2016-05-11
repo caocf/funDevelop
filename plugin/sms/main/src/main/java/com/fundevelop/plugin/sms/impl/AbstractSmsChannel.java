@@ -65,11 +65,7 @@ public abstract class AbstractSmsChannel implements SmsChannel {
                     phones.append(separator);
                 }
 
-                if (StringUtils.isNotBlank(phone.getCountryCode())) {
-                    phones.append(phone.getCountryCode());
-                }
-
-                phones.append(phone.getPhone());
+                phones.append(phone.toString());
             }
         }
 

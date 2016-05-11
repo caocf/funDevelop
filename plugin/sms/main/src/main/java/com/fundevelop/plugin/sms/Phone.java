@@ -1,5 +1,7 @@
 package com.fundevelop.plugin.sms;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,7 @@ import java.io.Serializable;
  */
 public class Phone implements Serializable {
     /** 国家区号（默认为中国） */
-    private String countryCode = "86";
+    private String countryCode;
     /** 电话号码 */
     private String phone;
 
@@ -35,5 +37,18 @@ public class Phone implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        if (StringUtils.isNotBlank(getPhone())) {
+            if (StringUtils.isNotBlank(getCountryCode())) {
+                return getCountryCode()+getPhone();
+            }
+
+            return getPhone();
+        }
+
+        return null;
     }
 }

@@ -21,6 +21,7 @@
 
         <!-- framework -->
         <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
+        <fundevelop-framework-manager-jpa.version>1.0.0-SNAPSHOT</fundevelop-framework-manager-jpa.version>
 
         <!-- web -->
         <servlet-api.version>2.5</servlet-api.version>
@@ -32,6 +33,11 @@
             <groupId>fundevelop.framework</groupId>
             <artifactId>service-base</artifactId>
             <version>${fundevelop-framework-service-base.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fundevelop.framework</groupId>
+            <artifactId>manager-jpa</artifactId>
+            <version>${fundevelop-framework-manager-jpa.version}</version>
         </dependency>
 
         <!-- web begin -->

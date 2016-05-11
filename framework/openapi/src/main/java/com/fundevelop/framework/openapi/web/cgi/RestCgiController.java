@@ -139,7 +139,7 @@ public class RestCgiController {
                 logger.debug("RECEIVE_REQUEST, cgi: {}, ip:{}, thread:{}, token: {}, content:\n{}",
                         cgiServiceName, clientIp, threadName, token, BeanUtils.toJson(request));
             } else {
-                logger.info("RECEIVE_REQUEST, cgi: {}, ip:{}, thread:{}, token: {}, content: {}",
+                logger.info("RECEIVE_REQUEST, cgi: {}, ip:{}, thread:{}, token: {}, content: \n{}",
                         cgiServiceName, clientIp, threadName, token, BeanUtils.toJson(request));
             }
         } catch (Exception ex) {

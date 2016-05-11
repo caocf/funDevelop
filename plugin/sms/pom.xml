@@ -16,6 +16,7 @@
     <modules>
         <module>main</module>
         <module>ctcSmsCloud</module>
+        <module>ihuyi</module>
     </modules>
     <name>快速开发::插件::短信</name>
 

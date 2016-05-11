@@ -26,15 +26,19 @@ import java.util.Map;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/4/18 16:03
  */
 public class HttpUtils {
-    private static String executePost(String httpUrl, HttpEntity param) {
-        return executePost(httpUrl, param, HttpClientBuilder.create().build(), DEFAULT_CHARENCODING);
+    public static String executePost(String httpUrl, HttpEntity param) {
+        return executePost(httpUrl, param, HttpClientBuilder.create().build(), DEFAULT_CHARENCODING, null);
+    }
+
+    public static String executePost(String httpUrl, HttpEntity param, Map<String, String> headers) {
+        return executePost(httpUrl, param, HttpClientBuilder.create().build(), DEFAULT_CHARENCODING, headers);
     }
 
     public static String executePost(String httpUrl, HttpEntity param, String chartEncoding) {
-        return executePost(httpUrl, param, HttpClientBuilder.create().build(), chartEncoding);
+        return executePost(httpUrl, param, HttpClientBuilder.create().build(), chartEncoding, null);
     }
 
-    public static String executePost(String httpUrl, HttpEntity param, HttpClient httpClient, String chartEncoding) {
+    public static String executePost(String httpUrl, HttpEntity param, HttpClient httpClient, String chartEncoding, Map<String, String> headers) {
         String result = "";
 
         try {
@@ -43,6 +47,12 @@ public class HttpUtils {
             }
 
             HttpPost httpPost = new HttpPost(httpUrl);
+
+            if (headers != null && !headers.isEmpty()) {
+                for (String key : headers.keySet()) {
+                    httpPost.addHeader(key, headers.get(key));
+                }
+            }
 
             // 设置请求配置
             setRequestConfig(httpPost);

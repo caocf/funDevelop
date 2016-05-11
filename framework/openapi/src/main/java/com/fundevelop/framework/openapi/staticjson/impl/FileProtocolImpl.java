@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Map;
 
@@ -22,11 +19,17 @@ import java.util.Map;
 @Component("staticJson.file")
 public class FileProtocolImpl implements CmdStaticJsonService {
     @Override
-    public Object getContent(URL url) {
+    public Map<String, Object> getContent(URL url) {
         String content = null;
 
         try {
-            content = FileUtils.readFileToString(new File(url.getFile()));
+            File jsonFile = new File(url.getFile());
+
+            if (!jsonFile.exists()) {
+                return null;
+            }
+
+            content = FileUtils.readFileToString(jsonFile);
 
             if (StringUtils.isNotBlank(content)) {
                 return BeanUtils.toBean(content, Map.class);

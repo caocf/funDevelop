@@ -55,7 +55,9 @@ public class RedisLock {
      * <p>无论加锁是否成功，都需要调用该方法进行解锁</p>
      */
     public void unlock() {
-        RedisUtil.del(key);
+        if (locked) {
+            RedisUtil.del(key);
+        }
         if (logger.isTraceEnabled()) {
             logger.trace("RedisLock解锁：{}", key);
         }

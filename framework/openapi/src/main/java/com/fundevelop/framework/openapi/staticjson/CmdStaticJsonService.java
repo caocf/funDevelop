@@ -1,6 +1,7 @@
 package com.fundevelop.framework.openapi.staticjson;
 
 import java.net.URL;
+import java.util.Map;
 
 /**
  * 静态JSON模式CMD服务获取接口定义类.
@@ -10,5 +11,5 @@ public interface CmdStaticJsonService {
     /**
      * 获取内容.
      */
-    Object getContent(URL url);
+    Map<String, Object> getContent(URL url);
 }

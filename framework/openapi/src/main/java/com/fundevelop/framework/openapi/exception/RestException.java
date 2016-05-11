@@ -9,11 +9,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(value = { "cause", "stackTrace"})
 public class RestException extends RuntimeException {
     private int errorCode;
+    private Integer subCode;
     private Object errorInfo;
 
     public RestException(int errorCode, Object errorInfo) {
         super(errorInfo==null?"":errorInfo.toString());
-        this.errorCode= errorCode;
+        this.errorCode = errorCode;
+        this.errorInfo = errorInfo;
+    }
+
+    public RestException(int errorCode, int subCode, Object errorInfo) {
+        super(errorInfo==null?"":errorInfo.toString());
+        this.errorCode = errorCode;
+        this.subCode = subCode;
         this.errorInfo = errorInfo;
     }
 
@@ -35,11 +43,22 @@ public class RestException extends RuntimeException {
         this.errorInfo = errorInfo;
     }
 
+    public RestException(int errorCode,int subCode, Object errorInfo, Throwable cause) {
+        super(errorInfo==null?"":errorInfo.toString(), cause);
+        this.errorCode = errorCode;
+        this.subCode = subCode;
+        this.errorInfo = errorInfo;
+    }
+
     public int getErrorCode() {
         return errorCode;
     }
 
     public Object getErrorInfo() {
         return errorInfo;
+    }
+
+    public Integer getSubCode() {
+        return subCode;
     }
 }

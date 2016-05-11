@@ -1,10 +1,13 @@
 package com.fundevelop.framework.openapi.utils;
 
 import com.fundevelop.commons.utils.BeanUtils;
+import com.fundevelop.commons.utils.StringUtils;
 import com.fundevelop.commons.web.utils.IpUtils;
+import com.fundevelop.commons.web.utils.PropertyUtil;
 import com.fundevelop.framework.base.config.ServerConfUtils;
 import com.fundevelop.framework.openapi.exception.RestException;
 import com.fundevelop.framework.openapi.model.RestError;
+import com.fundevelop.framework.openapi.model.RestErrorV2;
 import com.fundevelop.framework.openapi.model.RestRequest;
 import com.fundevelop.framework.openapi.model.RestResponse;
 import org.slf4j.Logger;
@@ -48,18 +51,39 @@ public class ResponseUtils {
      * 处理异常返回.
      */
     public static RestResponse handleException(RestRequest restRequest, RestResponse response, Throwable ex) {
-        RestError error;
+        if (restRequest.isDebug() && !restRequest.getReplaceParams().isEmpty()) {
+            response.setResponse(restRequest.getReplaceParams());
 
-        if (ex instanceof RestException) {
-            error = new RestError((RestException) ex);
+            logger.warn("cmd处理出现异常，启用调试模式直接返回前端构造数据", ex);
         } else {
-            error = new RestError(500, "服务器开小差了~~~");
+            RestError error;
+
+            boolean useV2 = StringUtils.isBooleanTrue(PropertyUtil.get("fun.openapi.restError.useV2", "false"));
+
+            if (ex instanceof RestException) {
+                if (useV2) {
+                    response.setStatusCode(((RestException) ex).getErrorCode());
+                    error = new RestErrorV2((RestException) ex);
+                } else {
+                    error = new RestError((RestException) ex);
+                    response.setStatusCode(error.getErrorCode());
+                }
+            } else {
+                if (useV2) {
+                    error = new RestErrorV2(500, "服务器开小差了~~~");
+                } else {
+                    error = new RestError(500, "服务器开小差了~~~");
+                }
+
+                response.setStatusCode(error.getErrorCode());
+            }
+
+            response.setError(error);
+
+            logger.error("cmd处理出现异常", ex);
         }
 
-        response.setError(error);
-        response.setStatusCode(error.getErrorCode());
-
-        logger.error("cmd处理出现异常", ex);
+        logResponse(restRequest, response);
 
         return response;
     }
@@ -71,6 +95,8 @@ public class ResponseUtils {
         if (response == null) {
             return handleException(restRequest, restRequest!=null?createByRequest(restRequest):new RestResponse(), null);
         }
+
+        logResponse(restRequest, response);
 
         return response;
     }
@@ -84,6 +110,20 @@ public class ResponseUtils {
         String jsonString = BeanUtils.toJson(restResponse);
         response.setContentType("text/javascript; charset=UTF-8");
         out.print(restRequest.getCallback() + "(" + jsonString + ")");
+    }
+
+    private static void logResponse(RestRequest request, RestResponse response) {
+        try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("REST_RESP, cmd: {}, thread: {}, requestId: {}, response: {}\n{}",
+                        request.getCmd(), Thread.currentThread().getName(), response.getRequestId(), BeanUtils.toJson(response));
+            } else {
+                logger.info("REST_RESP, cmd: {}, thread: {}, requestId: {}, response: {}",
+                        request.getCmd(), Thread.currentThread().getName(), response.getRequestId(), BeanUtils.toJson(response));
+            }
+        } catch (Exception ex) {
+            logger.warn("记录CGI响应日志出现异常", ex);
+        }
     }
 
     private ResponseUtils(){}

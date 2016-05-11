@@ -18,6 +18,7 @@ public class RestRequest {
     private String requestId; // UUID策略生成的唯一ID
     private String cmd; // 操作命令
     private Map<String, Object> parameters = new HashMap<>(); // 请求参数
+    private Map<String, Object> replaceParams = new HashMap<>(); // 使用静态资源时替换参数
     private String token; // 用户的token
     private String appPushToken; //用于推送消息的ID
     private Integer cityId; // 城市ID
@@ -95,6 +96,14 @@ public class RestRequest {
 
     public void addParameter(String key, Object value) {
         parameters.put(key, value);
+    }
+
+    public Map<String, Object> getReplaceParams() {
+        return replaceParams;
+    }
+
+    public void addReplaceParams(String key, Object value) {
+        replaceParams.put(key, value);
     }
 
     public String getToken() {

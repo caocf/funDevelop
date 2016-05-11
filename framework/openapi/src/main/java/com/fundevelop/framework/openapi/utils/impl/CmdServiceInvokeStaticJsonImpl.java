@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * OpenAPI cmd服务代理接口静态Json文件方式返回实现类.
@@ -34,7 +35,7 @@ public class CmdServiceInvokeStaticJsonImpl implements CmdServiceInvoker {
 
     @Override
     public void invoke(RestRequest request, RestResponse response) {
-        Object responseBody = null;
+        Map<String, Object> responseBody = null;
         String jsonPath = basePath;
 
         try {
@@ -52,9 +53,7 @@ public class CmdServiceInvokeStaticJsonImpl implements CmdServiceInvoker {
                 }
             }
 
-            URL jsonFileUrl = new URL(jsonPath);
-
-            System.out.println("static json file protocol="+jsonFileUrl.getProtocol());
+            URL jsonFileUrl = new URL(jsonPath+ JSONFILE);
 
             CmdStaticJsonService staticJsonService = (CmdStaticJsonService)SpringContextHolder.getBean("staticJson."+jsonFileUrl.getProtocol().toLowerCase());
 
@@ -62,6 +61,20 @@ public class CmdServiceInvokeStaticJsonImpl implements CmdServiceInvoker {
                 responseBody = staticJsonService.getContent(jsonFileUrl);
             } else {
                 throw new RuntimeException("不支持的静态文件协议：" + jsonFileUrl.getProtocol() + "，basePaht：" + basePath  + "，cmd：" + request.getCmd());
+            }
+
+            if (responseBody != null && !request.getReplaceParams().isEmpty()) {
+                for (String key : request.getReplaceParams().keySet()) {
+                    Object value = request.getReplaceParams().get(key);
+
+                    if (value instanceof Map && responseBody.containsKey(key)) {
+                        replaceReturnValue((Map) value, (Map)responseBody.get(key));
+                    } else {
+                        responseBody.put(key, request.getReplaceParams().get(key));
+                    }
+                }
+            } else if (responseBody == null && !request.getReplaceParams().isEmpty()) {
+                responseBody = request.getReplaceParams();
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException("获取静态JSON文件发生异常，basePaht：" + basePath  +"，cmd：" + request.getCmd(), e);
@@ -72,4 +85,18 @@ public class CmdServiceInvokeStaticJsonImpl implements CmdServiceInvoker {
             response.setDuration(responseTime.getTime() - request.getRequestTime().getTime());
         }
     }
+
+    public void replaceReturnValue(Map<String, Object> source, Map<String, Object> target) {
+        for (String key : source.keySet()) {
+            Object value = source.get(key);
+
+            if (value instanceof Map && target.containsKey(key)) {
+                replaceReturnValue((Map) value, (Map)target.get(key));
+            } else {
+                target.put(key, source.get(key));
+            }
+        }
+    }
+
+    private static final String JSONFILE = ".json";
 }

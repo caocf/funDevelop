@@ -18,5 +18,6 @@
         <module>ucloud</module>
         <module>sms</module>
         <module>im/rongcloud</module>
+        <module>aliyun-oss</module>
     </modules>
 </project>

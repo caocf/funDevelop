@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>plugin</artifactId>
+        <groupId>fundevelop</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fundevelop.plugin</groupId>
+    <artifactId>aliyun-oss</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>快速开发::插件::ALIYUN-OSS</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>1.7</jdk.version>
+
+        <!-- commons -->
+        <fundevelop-commons-web-utils.version>1.0.0-SNAPSHOT</fundevelop-commons-web-utils.version>
+    </properties>
+
+    <dependencies>
+        <!-- commons begin -->
+        <dependency>
+            <groupId>fundevelop.commons</groupId>
+            <artifactId>web-utils</artifactId>
+            <version>${fundevelop-commons-web-utils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        <!-- commons end -->
+    </dependencies>
+</project>

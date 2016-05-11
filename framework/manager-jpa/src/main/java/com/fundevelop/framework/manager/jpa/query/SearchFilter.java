@@ -10,22 +10,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class SearchFilter {
     /**
      * 定义可用的查询操作符.
-     * { oper:'eq', text:'等于'},
-     * { oper:'ne', text:'不等'},
-     * { oper:'lt', text:'小于'},
-     * { oper:'le', text:'小于等于'},
-     * { oper:'gt', text:'大于'},
-     * { oper:'ge', text:'大于等于'},
-     * { oper:'in', text:'属于'},
-     * { oper:'ni', text:'不属于'},
-     * { oper:'cn', text:'包含'},
-     * { oper:'nc', text:'不包含'},
-     * { oper:'nu', text:'不存在'},
-     * { oper:'nn', text:'存在'},
+     * { oper:'EQ', text:'='},
+     * { oper:'NE', text:'!='},
+     * { oper:'LT', text:'<'},
+     * { oper:'LE', text:'<='},
+     * { oper:'GT', text:'>'},
+     * { oper:'GE', text:'>='},
+     * { oper:'IN', text:'in'},
+     * { oper:'NI', text:'not in'},
+     * { oper:'CN', text:'like'},
+     * { oper:'NC', text:'not like'},
      * { oper:'NU', text:'is null'},
-     * { oper:'NNU', text:'is not null'},
-     * { oper:'BLANK', text:'为空'},
-     * { oper:'NBLANK', text:'不为空'}
+     * { oper:'NN', text:'is not null'},
+     * { oper:'BLANK', text:'='''},
+     * { oper:'NBLANK', text:'!='''}
      */
     public enum Operator {
         EQ, NE, LT, LE, GT, GE, IN, NI, CN, NC, NU, NN, BLANK, NBLANK
