@@ -6,11 +6,16 @@ import io.rong.ApiHttpClient;
 import io.rong.models.ChatroomInfo;
 import io.rong.models.FormatType;
 import io.rong.models.SdkHttpResult;
+import io.rong.util.HttpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -206,6 +211,49 @@ public class RongCloudUtils {
         } catch (Exception e) {
             logger.error("向融云请求销毁聊天室发生异常，聊天室ID：{}", roomId, e);
             throw new RuntimeException("向融云请求销毁聊天室发生异常", e);
+        }
+    }
+
+    /**
+     * 查询聊天室内用户.
+     * @param roomId 要查询的聊天室id
+     * @return 聊天室内用户
+     */
+    public static List<Map<String, Object>> queryChatroomUserList(String roomId) {
+        String appKey = PropertyUtil.get("im.rongcloud.appKey");
+        String appSecret = PropertyUtil.get("im.rongcloud.appSecret");
+
+        if (StringUtils.isBlank(appKey) || StringUtils.isBlank(appSecret)) {
+            throw new RuntimeException("请在application.properties中配置融云的appKey及appSecret");
+        }
+
+        try {
+            HttpURLConnection conn = HttpUtil.CreatePostHttpConnection(appKey, appSecret, "http://api.cn.ronghub.com/chatroom/user/query." + FormatType.json.toString());
+            StringBuilder sb = new StringBuilder();
+            sb.append("1=1");
+            if(StringUtils.isNotBlank(roomId)) {
+                sb.append("&chatroomId=").append(URLEncoder.encode(roomId, "UTF-8"));
+            }
+
+            HttpUtil.setBodyParameter(sb, conn);
+            SdkHttpResult result = HttpUtil.returnResult(conn);
+
+            logger.debug("向融云查询聊天室内用户，融云响应结果为：{}", result);
+
+            if (StringUtils.isNotBlank(result.getResult())) {
+                Map<String, Object> resultMap = BeanUtils.toBean(result.getResult(), Map.class);
+
+                if (resultMap == null || !Integer.valueOf(200).equals(resultMap.get("code"))) {
+                    throw new RuntimeException("向融云查询聊天室内用户，融云返回结果为失败");
+                }
+
+               return (List<Map<String, Object>>)resultMap.get("users");
+            } else {
+                throw new RuntimeException("向融云查询聊天室内用户时，融云无返回结果");
+            }
+        } catch (Exception e) {
+            logger.error("向融云查询聊天室内用户发生异常，聊天室ID：{}", roomId, e);
+            throw new RuntimeException("向融云查询聊天室内用户发生异常", e);
         }
     }
 
