@@ -53,6 +53,7 @@
         <module>cache</module>
         <module>plugin</module>
         <module>job</module>
+        <module>payment</module>
     </modules>
 
     <!-- 设定仓库,按设定顺序进行查找. -->

@@ -17,6 +17,7 @@
         <module>main</module>
         <module>ctcSmsCloud</module>
         <module>ihuyi</module>
+        <module>jianzhou</module>
     </modules>
     <name>快速开发::插件::短信</name>
 

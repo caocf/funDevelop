@@ -69,10 +69,11 @@ public class ResponseUtils {
                     response.setStatusCode(error.getErrorCode());
                 }
             } else {
+                String errorMsg = PropertyUtil.get("fun.openapi.error.500", "服务器开小差了~~~");
                 if (useV2) {
-                    error = new RestErrorV2(500, "服务器开小差了~~~");
+                    error = new RestErrorV2(500, errorMsg);
                 } else {
-                    error = new RestError(500, "服务器开小差了~~~");
+                    error = new RestError(500, errorMsg);
                 }
 
                 response.setStatusCode(error.getErrorCode());

@@ -21,7 +21,7 @@ public class OssUtils {
         OSSClient client = null;
 
         try {
-            getClient();
+            client = getClient();
 
             PutObjectResult result = client.putObject(bucketName, key, file);
             logger.debug("使用阿里云OSS上传文件，bucketName：{}，key：{}，file：{}，result：{}", bucketName, key, file.getPath(), result);
@@ -44,7 +44,7 @@ public class OssUtils {
         OSSClient client = null;
 
         try {
-            getClient();
+            client = getClient();
 
             PutObjectResult result = client.putObject(bucketName, key, input);
             logger.debug("使用阿里云OSS上传文件，bucketName：{}，key：{}，result：{}", bucketName, key, result);

@@ -2,10 +2,7 @@ package com.fundevelop.plugin.sms.ctcsmscloud;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.ctc.smscloud.json.JSONHttpClient;
-import com.fundevelop.plugin.sms.ReceiveSms;
-import com.fundevelop.plugin.sms.Sms;
-import com.fundevelop.plugin.sms.SmsEventNotifyHandle;
-import com.fundevelop.plugin.sms.SmsReport;
+import com.fundevelop.plugin.sms.*;
 import com.fundevelop.plugin.sms.impl.AbstractSmsChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -29,6 +26,12 @@ public class CtcSmscloudChannel extends AbstractSmsChannel {
         String content = null;
 
         try {
+            for (Phone phone : sms.getPhones()) {
+                if (StringUtils.isNotBlank(phone.getCountryCode()) && !"86".equals(phone.getCountryCode())) {
+                    phone.setCountryCode("+"+phone.getCountryCode());
+                }
+            }
+
             phones = linkPhones(sms.getPhones(), ",");
             content = signContent(sms.getContent());
 
