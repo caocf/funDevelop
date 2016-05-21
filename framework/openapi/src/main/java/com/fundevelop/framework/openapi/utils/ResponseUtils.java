@@ -60,7 +60,17 @@ public class ResponseUtils {
 
             boolean useV2 = StringUtils.isBooleanTrue(PropertyUtil.get("fun.openapi.restError.useV2", "false"));
 
-            if (ex instanceof RestException) {
+            if (ex instanceof IllegalArgumentException) {
+                String errorMsg = ex.getMessage();
+
+                if (useV2) {
+                    error = new RestErrorV2(412, errorMsg);
+                } else {
+                    error = new RestError(412, errorMsg);
+                }
+
+                response.setStatusCode(error.getErrorCode());
+            } else if (ex instanceof RestException) {
                 if (useV2) {
                     response.setStatusCode(((RestException) ex).getErrorCode());
                     error = new RestErrorV2((RestException) ex);

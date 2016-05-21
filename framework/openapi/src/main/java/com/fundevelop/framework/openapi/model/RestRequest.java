@@ -1,7 +1,9 @@
 package com.fundevelop.framework.openapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ public class RestRequest {
     private String requestId; // UUID策略生成的唯一ID
     private String cmd; // 操作命令
     private Map<String, Object> parameters = new HashMap<>(); // 请求参数
+    private MultipartFile[] files; // 上传文件
     private Map<String, Object> replaceParams = new HashMap<>(); // 使用静态资源时替换参数
     private String token; // 用户的token
     private String appPushToken; //用于推送消息的ID
@@ -98,12 +101,25 @@ public class RestRequest {
         parameters.put(key, value);
     }
 
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
+    }
+
     public Map<String, Object> getReplaceParams() {
         return replaceParams;
     }
 
     public void addReplaceParams(String key, Object value) {
         replaceParams.put(key, value);
+    }
+
+    @JsonIgnore
+    public MultipartFile[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(MultipartFile[] files) {
+        this.files = files;
     }
 
     public String getToken() {

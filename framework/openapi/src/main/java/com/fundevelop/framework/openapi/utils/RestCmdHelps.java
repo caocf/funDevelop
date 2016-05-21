@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -62,9 +63,16 @@ public class RestCmdHelps extends InstantiationAwareBeanPostProcessorAdapter imp
                         String parameterName = cmdService.getMethodParameterNames()[i];
                         Object paramValue = request.getRestRequest().getParameters().get(parameterName);
 
-                        logger.debug("从请求{}中获取参数属性：{}={}", cmd, parameterName, paramValue);
+                        if ("files".equals(parameterName) && paramValue==null
+                                && request.getRestRequest().getFiles()!=null
+                                && request.getRestRequest().getFiles().length>0) {
+                            logger.debug("从请求{}中获取参数属性：{}={}", cmd, parameterName, "文件流");
+                            methodParameters[i] = request.getRestRequest().getFiles();
+                        } else {
+                            logger.debug("从请求{}中获取参数属性：{}={}", cmd, parameterName, paramValue);
 
-                        methodParameters[i] = BeanUtils.convertValue(paramType, paramValue);
+                            methodParameters[i] = BeanUtils.convertValue(paramType, paramValue);
+                        }
                     }
                 }
             }
@@ -103,6 +111,18 @@ public class RestCmdHelps extends InstantiationAwareBeanPostProcessorAdapter imp
 
         businessRequest.setHttpRequest(httpRequest);
         businessRequest.setRestRequest(restRequest);
+
+        if (restRequest.getFiles()!=null && restRequest.getFiles().length>0) {
+            try {
+                Method setFilesMethod = businessRequest.getClass().getMethod("setFiles", MultipartFile[].class);
+
+                if (setFilesMethod != null) {
+                    setFilesMethod.invoke(businessRequest, restRequest.getFiles());
+                }
+            } catch (Exception ex) {
+                logger.warn("向CMD服务注入上传文件发生异常", ex);
+            }
+        }
 
         return businessRequest;
     }

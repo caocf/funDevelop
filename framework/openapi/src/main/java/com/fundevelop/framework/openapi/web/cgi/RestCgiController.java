@@ -17,6 +17,7 @@ import com.fundevelop.framework.openapi.model.RestResponse;
 import com.fundevelop.framework.openapi.utils.CmdServiceInvoker;
 import com.fundevelop.framework.openapi.utils.ResponseUtils;
 import com.fundevelop.framework.openapi.utils.RestCmdHelps;
+import com.fundevelop.framework.openapi.web.BaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/cgi")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RestCgiController {
+public class RestCgiController extends BaseController {
     /**
      * 初始化CGI.
      */
@@ -196,29 +197,4 @@ public class RestCgiController {
 
         return restRequest;
     }
-
-    /**
-     * 初始化请求.
-     */
-    private void initRequest(RestRequest restRequest, HttpServletRequest httpRequest) {
-        if (restRequest != null) {
-            // 唯一ID
-            restRequest.setRequestId(UuidGenerator.getNextId());
-
-            // 请求时间
-            restRequest.setRequestTime(new Date());
-
-            // 记录客户端IP
-            if (StringUtils.isBlank(restRequest.getIp())) {
-                restRequest.setIp(IpUtils.getIpAddr(httpRequest));
-            }
-
-            // debug 开关
-            if (StringUtils.equalsIgnoreCase("true", PropertyUtil.get("fun.openapi.forceTurnOffDebug"))) {
-                restRequest.setDebug(false);
-            }
-        }
-    }
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 }
