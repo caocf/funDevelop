@@ -763,83 +763,117 @@ public class QueryBuilder {
      * 创建WHERE条件SQL语句.
      */
     private String getWhere(List<SearchFilter> filters) {
-        List<String> columns = new ArrayList<>();
+        List<String> columns = new ArrayList<>(filters.size());
 
         if (filters != null && !filters.isEmpty()) {
             for (SearchFilter filter : filters) {
-                String whereEpr = null;
-                boolean isLeftJoinTableColumn = false;
-                String fieldName = filter.fieldName;
-
-                if (fieldName.indexOf("@lj") != -1) {
-                    isLeftJoinTableColumn = true;
-                    fieldName = fieldName.replace("@lj", "");
-                }
-
-                switch (filter.operator) {
-                    case EQ:
-                        whereEpr = equal(fieldName, filter.value);
-                        break;
-                    case NE:
-                        whereEpr = notEqual(fieldName, filter.value);
-                        break;
-                    case LT:
-                        whereEpr = lessThan(fieldName, filter.value);
-                        break;
-                    case LE:
-                        whereEpr = lessThanOrEqualTo(fieldName, filter.value);
-                        break;
-                    case GT:
-                        whereEpr = greaterThan(fieldName, filter.value);
-                        break;
-                    case GE:
-                        whereEpr = greaterThanOrEqualTo(fieldName, filter.value);
-                        break;
-                    case IN:
-                        whereEpr = in(fieldName, filter.value);
-                        break;
-                    case NI:
-                        whereEpr = notIn(fieldName, filter.value);
-                        break;
-                    case CN:
-                        whereEpr = like(fieldName, "%" + filter.value + "%");
-                        break;
-                    case NC:
-                        whereEpr = notLike(fieldName, "%" + filter.value + "%");
-                        break;
-                    case NU:
-                        whereEpr = isNull(fieldName);
-                        break;
-                    case NN:
-                        whereEpr = isNotNull(fieldName);
-                        break;
-                    case BLANK:
-                        whereEpr = isBlank(fieldName);
-                        break;
-                    case NBLANK:
-                        whereEpr = isNotBlank(fieldName);
-                        break;
-                    default:
-                        break;
-                }
+                String whereEpr = processFilter(filter);
 
                 if (StringUtils.isNotBlank(whereEpr)) {
-                    if (isLeftJoinTableColumn) {
-                        if (!usedLeftJoinTables.isEmpty() && fieldName.indexOf(".") != -1) {
-                            String jtAlias = fieldName.split("[.]")[0];
-
-                            if (usedLeftJoinTables.contains(jtAlias)) {
-                                addFilterToLeftJoinColumns(jtAlias, whereEpr);
-                            }
-                        }
-                    } else {
-                        columns.add(whereEpr);
-                    }
+                    columns.add(whereEpr);
                 }
             }
         }
 
         return StringUtils.join(columns, " and ");
+    }
+
+    private String processFilter(SearchFilter filter) {
+        String whereEpr = buildFilter(filter);
+
+        if (filter.hasOrFilter()) {
+            List<String> columns = new ArrayList<>(filter.getOrFilters().size()+1);
+
+            if (StringUtils.isNotBlank(whereEpr)) {
+                columns.add(whereEpr);
+            }
+
+            for (SearchFilter orFilter : filter.getOrFilters()) {
+                whereEpr = buildFilter(orFilter);
+
+                if (StringUtils.isNotBlank(whereEpr)) {
+                    columns.add(whereEpr);
+                }
+            }
+
+            return "(" + StringUtils.join(columns, " or ") + ")";
+        } else {
+            return whereEpr;
+        }
+    }
+
+    private String buildFilter(SearchFilter filter) {
+        String whereEpr = null;
+        boolean isLeftJoinTableColumn = false;
+        String fieldName = filter.fieldName;
+
+        if (fieldName.indexOf("@lj") != -1) {
+            isLeftJoinTableColumn = true;
+            fieldName = fieldName.replace("@lj", "");
+        }
+
+        switch (filter.operator) {
+            case EQ:
+                whereEpr = equal(fieldName, filter.value);
+                break;
+            case NE:
+                whereEpr = notEqual(fieldName, filter.value);
+                break;
+            case LT:
+                whereEpr = lessThan(fieldName, filter.value);
+                break;
+            case LE:
+                whereEpr = lessThanOrEqualTo(fieldName, filter.value);
+                break;
+            case GT:
+                whereEpr = greaterThan(fieldName, filter.value);
+                break;
+            case GE:
+                whereEpr = greaterThanOrEqualTo(fieldName, filter.value);
+                break;
+            case IN:
+                whereEpr = in(fieldName, filter.value);
+                break;
+            case NI:
+                whereEpr = notIn(fieldName, filter.value);
+                break;
+            case CN:
+                whereEpr = like(fieldName, "%" + filter.value + "%");
+                break;
+            case NC:
+                whereEpr = notLike(fieldName, "%" + filter.value + "%");
+                break;
+            case NU:
+                whereEpr = isNull(fieldName);
+                break;
+            case NN:
+                whereEpr = isNotNull(fieldName);
+                break;
+            case BLANK:
+                whereEpr = isBlank(fieldName);
+                break;
+            case NBLANK:
+                whereEpr = isNotBlank(fieldName);
+                break;
+            default:
+                throw new RuntimeException("未知的查询比较符");
+        }
+
+        if (StringUtils.isNotBlank(whereEpr)) {
+            if (isLeftJoinTableColumn) {
+                if (!usedLeftJoinTables.isEmpty() && fieldName.indexOf(".") != -1) {
+                    String jtAlias = fieldName.split("[.]")[0];
+
+                    if (usedLeftJoinTables.contains(jtAlias)) {
+                        addFilterToLeftJoinColumns(jtAlias, whereEpr);
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        return whereEpr;
     }
 
     private void addFilterToLeftJoinColumns(String jtAlias, String filter) {

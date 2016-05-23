@@ -77,95 +77,102 @@ public class SearchSpecification<T> implements Specification<T> {
      */
     private List<Predicate> buildPredicateByFilter(final Collection<SearchFilter> filters, Root<?> root, CriteriaBuilder builder) {
         if (filters != null && !filters.isEmpty()) {
-            List<Predicate> predicates = new ArrayList<>();
+            List<Predicate> predicates = new ArrayList<>(filters.size());
 
             for (SearchFilter filter : filters) {
-                String[] names = StringUtils.split(filter.fieldName, ".");
-                Path expression = root.get(names[0]);
-                for (int i = 1; i < names.length; i++) {
-                    expression = expression.get(names[i]);
-                }
-
-                switch (filter.operator) {
-                    case EQ:
-                        predicates.add(builder.equal(expression, BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
-                        break;
-                    case NE:
-                        predicates.add(builder.notEqual(expression, BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
-                        break;
-                    case LT:
-                        predicates.add(builder.lessThan(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
-                        break;
-                    case LE:
-                        predicates.add(builder.lessThanOrEqualTo(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
-                        break;
-                    case GT:
-                        predicates.add(builder.greaterThan(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
-                        break;
-                    case GE:
-                        predicates.add(builder.greaterThanOrEqualTo(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value)));
-                        break;
-                    case IN:
-                        CriteriaBuilder.In in = builder.in(expression);
-
-                        if (filter.value.getClass().isArray()) {
-                            for (Object value : (Object[])filter.value) {
-                                in.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
-                            }
-                        } else if (filter.value instanceof  Collection) {
-                            for (Object value : (Collection)filter.value) {
-                                in.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
-                            }
-                        } else {
-                            in.value(filter.value);
-                        }
-
-                        predicates.add(in);
-                        break;
-                    case NI:
-                        CriteriaBuilder.In notin = builder.in(expression);
-
-                        if (filter.value.getClass().isArray()) {
-                            for (Object value : (Object[])filter.value) {
-                                notin.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
-                            }
-                        } else if (filter.value instanceof  Collection) {
-                            for (Object value : (Collection)filter.value) {
-                                notin.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
-                            }
-                        } else {
-                            notin.value(filter.value);
-                        }
-
-                        predicates.add(builder.not(notin));
-                        break;
-                    case CN:
-                        predicates.add(builder.like(expression, "%" + filter.value + "%"));
-                        break;
-                    case NC:
-                        predicates.add(builder.notLike(expression, "%" + filter.value + "%"));
-                        break;
-                    case NU:
-                        predicates.add(builder.isNull(expression));
-                        break;
-                    case NN:
-                        predicates.add(builder.isNotNull(expression));
-                        break;
-                    case BLANK:
-                        predicates.add(builder.equal(expression, ""));
-                        break;
-                    case NBLANK:
-                        predicates.add(builder.notEqual(expression, ""));
-                        break;
-                    default:
-                        break;
-                }
+                predicates.add(processFilter(filter, root, builder));
             }
 
             return predicates;
         }
 
         return null;
+    }
+
+    private Predicate processFilter(SearchFilter filter, Root<?> root, CriteriaBuilder builder) {
+        Predicate predicate = buildFilter(filter, root, builder);
+
+        if (filter.hasOrFilter()) {
+            List<Predicate> predicates = new ArrayList<>(filter.getOrFilters().size()+1);
+            predicates.add(predicate);
+
+            for (SearchFilter orFilter : filter.getOrFilters()) {
+                predicates.add(buildFilter(orFilter, root, builder));
+            }
+
+            return builder.or(predicates.toArray(new Predicate[predicates.size()]));
+        } else {
+            return predicate;
+        }
+    }
+
+    private Predicate buildFilter(SearchFilter filter, Root<?> root, CriteriaBuilder builder) {
+        String[] names = StringUtils.split(filter.fieldName, ".");
+        Path expression = root.get(names[0]);
+        for (int i = 1; i < names.length; i++) {
+            expression = expression.get(names[i]);
+        }
+
+        switch (filter.operator) {
+            case EQ:
+                return builder.equal(expression, BeanUtils.convertValue(modelClass, filter.fieldName, filter.value));
+            case NE:
+                return builder.notEqual(expression, BeanUtils.convertValue(modelClass, filter.fieldName, filter.value));
+            case LT:
+                return builder.lessThan(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value));
+            case LE:
+                return builder.lessThanOrEqualTo(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value));
+            case GT:
+                return builder.greaterThan(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value));
+            case GE:
+                return builder.greaterThanOrEqualTo(expression, (Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, filter.value));
+            case IN:
+                CriteriaBuilder.In in = builder.in(expression);
+
+                if (filter.value.getClass().isArray()) {
+                    for (Object value : (Object[])filter.value) {
+                        in.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                    }
+                } else if (filter.value instanceof  Collection) {
+                    for (Object value : (Collection)filter.value) {
+                        in.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                    }
+                } else {
+                    in.value(filter.value);
+                }
+
+                return in;
+            case NI:
+                CriteriaBuilder.In notin = builder.in(expression);
+
+                if (filter.value.getClass().isArray()) {
+                    for (Object value : (Object[])filter.value) {
+                        notin.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                    }
+                } else if (filter.value instanceof  Collection) {
+                    for (Object value : (Collection)filter.value) {
+                        notin.value((Comparable) BeanUtils.convertValue(modelClass, filter.fieldName, value));
+                    }
+                } else {
+                    notin.value(filter.value);
+                }
+
+                return builder.not(notin);
+            case CN:
+                return builder.like(expression, "%" + filter.value + "%");
+            case NC:
+                return builder.notLike(expression, "%" + filter.value + "%");
+            case NU:
+                return builder.isNull(expression);
+            case NN:
+                return builder.isNotNull(expression);
+            case BLANK:
+                return builder.equal(expression, "");
+            case NBLANK:
+                return builder.notEqual(expression, "");
+            default:
+                throw new RuntimeException("未知的查询比较符");
+        }
     }
 
     /** 查询条件过滤器. */

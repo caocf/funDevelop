@@ -2,6 +2,9 @@ package com.fundevelop.framework.manager.jpa.query;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 动态查询过滤器.
  * <p>描述:构造查询条件</p>
@@ -35,6 +38,8 @@ public class SearchFilter {
     public Object value;
     /** 比较符. */
     public Operator operator;
+    /** or 条件 */
+    private List<SearchFilter> orFilters = null;
 
     /**
      * 构造函数.
@@ -46,6 +51,40 @@ public class SearchFilter {
         this.fieldName = fieldName;
         this.value = value;
         this.operator = operator;
+    }
+
+    /**
+     * 是否有OR条件.
+     * @return
+     */
+    public boolean hasOrFilter() {
+        return (orFilters!=null&&!orFilters.isEmpty());
+    }
+
+    /**
+     * 增加OR条件.
+     * @param fieldName 字段名称
+     * @param operator 比较符
+     * @param value 字段值
+     */
+    public void or(String fieldName, Operator operator, Object value) {
+        or(new SearchFilter(fieldName, operator, value));
+    }
+
+    /**
+     * 增加OR条件.
+     * @param filter 查询条件
+     */
+    public void or(SearchFilter filter) {
+        if (orFilters == null) {
+            orFilters = new ArrayList<>();
+        }
+
+        orFilters.add(filter);
+    }
+
+    public List<SearchFilter> getOrFilters() {
+        return orFilters;
     }
 
     @Override
