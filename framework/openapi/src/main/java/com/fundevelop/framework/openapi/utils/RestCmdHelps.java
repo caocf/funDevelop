@@ -1,6 +1,5 @@
 package com.fundevelop.framework.openapi.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.commons.utils.ClassUtils;
@@ -24,8 +23,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,16 +60,9 @@ public class RestCmdHelps extends InstantiationAwareBeanPostProcessorAdapter imp
                         String parameterName = cmdService.getMethodParameterNames()[i];
                         Object paramValue = request.getRestRequest().getParameters().get(parameterName);
 
-                        if ("files".equals(parameterName) && paramValue==null
-                                && request.getRestRequest().getFiles()!=null
-                                && request.getRestRequest().getFiles().length>0) {
-                            logger.debug("从请求{}中获取参数属性：{}={}", cmd, parameterName, "文件流");
-                            methodParameters[i] = request.getRestRequest().getFiles();
-                        } else {
-                            logger.debug("从请求{}中获取参数属性：{}={}", cmd, parameterName, paramValue);
+                        logger.debug("从请求{}中获取参数属性：{}={}", cmd, parameterName, paramValue);
 
-                            methodParameters[i] = BeanUtils.convertValue(paramType, paramValue);
-                        }
+                        methodParameters[i] = BeanUtils.convertValue(paramType, paramValue);
                     }
                 }
             }

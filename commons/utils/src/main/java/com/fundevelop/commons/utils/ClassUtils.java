@@ -4,10 +4,9 @@ import javassist.*;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
-import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.asm.*;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -74,23 +73,26 @@ public class ClassUtils {
 
                         // 按文件的形式去查找
                         Enumeration<URL> urls = loader.getResources("com/fundevelop");
-                        while (urls.hasMoreElements()) {
-                            URL url = urls.nextElement();
 
-                            if (url != null) {
-                                String protocol = url.getProtocol();
+                        if (urls != null) {
+                            while (urls.hasMoreElements()) {
+                                URL url = urls.nextElement();
 
-                                String path = org.apache.commons.lang3.StringUtils.substringBeforeLast(url.getPath(), ".jar")+".jar";
-                                url = new URL(path);
+                                if (url != null) {
+                                    String protocol = url.getProtocol();
 
-                                if ("jar".equals(protocol) && !clazzPaths.contains(url)) {
-                                    logger.info("添加类路径：{}", url.getPath());
+                                    String path = StringUtils.substringBeforeLast(url.getPath(), ".jar") + ".jar";
+                                    url = new URL(path);
 
-                                    clazzPaths.add(url);
-                                    try {
-                                        ClassPool.getDefault().insertClassPath(url.getPath());
-                                    } catch (NotFoundException e) {
-                                        logger.warn("添加类路径失败:{}", url, e);
+                                    if ("jar".equals(protocol) && !clazzPaths.contains(url)) {
+                                        logger.info("添加类路径：{}", url.getPath());
+
+                                        clazzPaths.add(url);
+                                        try {
+                                            ClassPool.getDefault().insertClassPath(url.getPath());
+                                        } catch (NotFoundException e) {
+                                            logger.warn("添加类路径失败:{}", url, e);
+                                        }
                                     }
                                 }
                             }
@@ -111,7 +113,7 @@ public class ClassUtils {
     private static void insertClassPath(URL classPath) {
         insertFunJar();
 
-        if (!clazzPaths.contains(classPath)) {
+        if (classPath != null && !clazzPaths.contains(classPath)) {
             logger.info("添加类路径：{}", classPath.getPath());
 
             clazzPaths.add(classPath);
