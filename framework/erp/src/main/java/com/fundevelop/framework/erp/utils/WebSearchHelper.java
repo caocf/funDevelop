@@ -46,7 +46,7 @@ public class WebSearchHelper {
         Sort sort = null;
 
         if (orderStrs != null) {
-            List<Sort.Order> orders = new ArrayList<Sort.Order>();
+            List<Sort.Order> orders = new ArrayList<>();
 
             for (int i=0; i < orderStrs.length; i++) {
                 String order = orderStrs[i];

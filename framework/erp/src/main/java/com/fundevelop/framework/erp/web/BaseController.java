@@ -51,8 +51,6 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
      * @param otClass 绑定的实体类
      * @return 查询条件
      * @throws FatalException
-     * @author <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a>
-     * @date 2014-06-20  11:27:46
      */
     public <OID extends Serializable,OT extends BaseEntity<OID>> Specification<OT> buildSpecification(Class<OT> otClass, HttpServletRequest request) throws FatalException {
         return WebSearchHelper.buildSpecification(otClass, request);
