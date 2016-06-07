@@ -116,11 +116,11 @@ public class UploadController extends BaseController {
             String clientIp = IpUtils.getIpAddr(httpRequest);
             String cgiServiceName = ServerConfUtils.getConf().getServiceName();
             if (logger.isDebugEnabled()) {
-                logger.debug("RECEIVE_REQUEST, uploadFile: {}, ip:{}, thread:{}, token: {}, content:\n{}",
-                        cgiServiceName, clientIp, threadName, token, BeanUtils.toJson(request));
+                logger.debug("RECEIVE_REQUEST, uploadFile: {}, ip:{}, thread:{}, token: {}, files:{}, content:\n{}",
+                        cgiServiceName, clientIp, threadName, token, request.getFiles()==null?0:request.getFiles().length, BeanUtils.toJson(request));
             } else {
-                logger.info("RECEIVE_REQUEST, uploadFile: {}, ip:{}, thread:{}, token: {}, content: \n{}",
-                        cgiServiceName, clientIp, threadName, token, BeanUtils.toJson(request));
+                logger.info("RECEIVE_REQUEST, uploadFile: {}, ip:{}, thread:{}, token: {}, files:{}, content: \n{}",
+                        cgiServiceName, clientIp, threadName, token, request.getFiles()==null?0:request.getFiles().length, BeanUtils.toJson(request));
             }
         } catch (Exception ex) {
             logger.warn("记录uploadFile请求日志出现异常", ex);

@@ -17,6 +17,12 @@ import java.io.InputStream;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/5/10 19:12
  */
 public class OssUtils {
+    /**
+     * 上传文件.
+     * @param bucketName bucket名称
+     * @param key 文件在OSS的访问名称
+     * @param file 要上传的文件
+     */
     public static void putObject(String bucketName, String key, File file) {
         OSSClient client = null;
 
@@ -40,6 +46,12 @@ public class OssUtils {
         }
     }
 
+    /**
+     * 上传文件.
+     * @param bucketName bucket名称
+     * @param key 文件在OSS的访问名称
+     * @param input 要上传的文件流
+     */
     public static void putObject(String bucketName, String key, InputStream input) {
         OSSClient client = null;
 
@@ -56,6 +68,81 @@ public class OssUtils {
                     logger.warn("关闭阿里云OSS返回流失败");
                 }
             }
+        } finally {
+            if (client != null) {
+                client.shutdown();
+            }
+        }
+    }
+
+    /**
+     * 删除单个文件.
+     * @param bucketName bucket名称
+     * @param key 要删除的文件在OSS上的访问名称
+     */
+    public static void deleteObject(String bucketName, String key) {
+        OSSClient client = null;
+
+        try {
+            client = getClient();
+            client.deleteObject(bucketName, key);
+            logger.debug("从阿里云OSS上删除文件, bucketName:{}, key:{}", bucketName, key);
+        } finally {
+            if (client != null) {
+                client.shutdown();
+            }
+        }
+    }
+
+    /**
+     * 创建Bucket.
+     */
+    public static void createBucket(String bucketName) {
+        OSSClient client = null;
+
+        try {
+            client = getClient();
+
+            if (!client.doesBucketExist(bucketName)) {
+                client.createBucket(bucketName);
+                logger.debug("在阿里云OSS上创建Bucket, bucketName:{}", bucketName);
+            }
+        } finally {
+            if (client != null) {
+                client.shutdown();
+            }
+        }
+    }
+
+    /**
+     * 删除Bucket.
+     */
+    public static void deleteBucket(String bucketName) {
+        OSSClient client = null;
+
+        try {
+            client = getClient();
+
+            if (client.doesBucketExist(bucketName)) {
+                client.deleteBucket(bucketName);
+                logger.debug("从阿里云OSS上删除Bucket, bucketName:{}", bucketName);
+            }
+        } finally {
+            if (client != null) {
+                client.shutdown();
+            }
+        }
+    }
+
+    /**
+     * 判断Bucket是否存在.
+     */
+    public static boolean doesBucketExist(String bucketName) {
+        OSSClient client = null;
+
+        try {
+            client = getClient();
+            return client.doesBucketExist(bucketName);
         } finally {
             if (client != null) {
                 client.shutdown();
@@ -86,7 +173,7 @@ public class OssUtils {
         conf.setMaxConnections(Integer.parseInt(PropertyUtil.get("aliyun.oss.maxConnections", "100"), 10));
         conf.setConnectionTimeout(Integer.parseInt(PropertyUtil.get("aliyun.oss.connectionTimeout", "5000"), 10));
 
-        return new OSSClient(endPoint, accessKeyId, accessKeySecret);
+        return new OSSClient(endPoint, accessKeyId, accessKeySecret, conf);
     }
 
     private OssUtils(){}

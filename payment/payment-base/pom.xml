@@ -20,14 +20,19 @@
         <jdk.version>1.7</jdk.version>
 
         <!-- framework -->
-        <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
+        <fundevelop.framework.version>1.0.0-SNAPSHOT</fundevelop.framework.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>fundevelop.framework</groupId>
             <artifactId>service-base</artifactId>
-            <version>${fundevelop-framework-service-base.version}</version>
+            <version>${fundevelop.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fundevelop.framework</groupId>
+            <artifactId>manager-jpa</artifactId>
+            <version>${fundevelop.framework.version}</version>
         </dependency>
     </dependencies>
 </project>

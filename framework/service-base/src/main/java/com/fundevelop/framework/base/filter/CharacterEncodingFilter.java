@@ -1,5 +1,6 @@
 package com.fundevelop.framework.base.filter;
 
+import com.fundevelop.commons.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -48,7 +49,12 @@ public class CharacterEncodingFilter extends OncePerRequestFilter {
         if (parameterNames != null && parameterNames.hasMoreElements()) {
             for (; parameterNames.hasMoreElements();) {
                 String paramName = parameterNames.nextElement();
-                System.err.println("filter param name="+paramName+"   ="+getFilterConfig().getInitParameter(paramName));
+
+                if ("encoding".equals(paramName)) {
+                    setEncoding(getFilterConfig().getInitParameter(paramName));
+                } else if ("forceEncoding".endsWith(paramName)) {
+                    setForceEncoding(StringUtils.isBooleanTrue(getFilterConfig().getInitParameter(paramName)));
+                }
             }
         }
     }

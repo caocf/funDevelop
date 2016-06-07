@@ -18,16 +18,26 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
 
-        <!-- commons -->
-        <fundevelop-commons-web-utils.version>1.0.0-SNAPSHOT</fundevelop-commons-web-utils.version>
+        <!-- framework -->
+        <fundevelop.framework.version>1.0.0-SNAPSHOT</fundevelop.framework.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>fundevelop.framework</groupId>
+            <artifactId>service-base</artifactId>
+            <version>${fundevelop.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fundevelop.framework</groupId>
+            <artifactId>manager-jpa</artifactId>
+            <version>${fundevelop.framework.version}</version>
+        </dependency>
         <!-- commons begin -->
         <dependency>
             <groupId>fundevelop.commons</groupId>
             <artifactId>web-utils</artifactId>
-            <version>${fundevelop-commons-web-utils.version}</version>
+            <version>${fundevelop.framework.version}</version>
         </dependency>
         <!-- commons end -->
     </dependencies>

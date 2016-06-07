@@ -1,11 +1,13 @@
 package com.fundevelop.framework.manager.jpa;
 
+import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.commons.utils.ClassUtils;
 import com.fundevelop.framework.manager.jpa.query.SearchFilter;
 import com.fundevelop.framework.manager.jpa.query.SearchUtils;
+import com.fundevelop.persistence.entity.hibernate.BaseEntity;
 import com.fundevelop.persistence.jpa.BaseDao;
 import com.fundevelop.persistence.jpa.JdbcDao;
-import com.fundevelop.persistence.entity.hibernate.BaseEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +120,7 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
 
     /**
      * 获取实体记录数.
-     * @param spec 查询条件，参照{@link Specification}
+     * @param filters 查询条件，参照{@link Specification}
      * @return 符合条件的实体数
      */
     public long count(List<SearchFilter> filters){
@@ -127,7 +129,7 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
 
     /**
      * 获取实体记录数.
-     * @param spec 查询条件，参照{@link Specification}
+     * @param filters 查询条件
      * @return 符合条件的实体数
      */
     public long count(SearchFilter...filters){
@@ -143,6 +145,27 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
     public long count(Specification<T> spec){
         Assert.notNull(spec, "查询条件不能为空");
         return getDao().count(spec);
+    }
+
+    /**
+     * 批量删除.
+     * @param ids 要删除的主键ID,多个使用","进行分割
+     */
+    @Transactional
+    public void batchDelete(String ids) {
+        if (StringUtils.isNotBlank(ids)) {
+            String[] split = StringUtils.split(ids, ",");
+            for (String s : split) {
+                ID rid = null;
+                try {
+                    rid = (ID) BeanUtils.convertValue(entityKeyClazz, s);
+                } catch (Exception e) {
+                    throw new RuntimeException("动态转换ID类型失败!", e);
+                }
+
+                delete(rid);
+            }
+        }
     }
 
     /**

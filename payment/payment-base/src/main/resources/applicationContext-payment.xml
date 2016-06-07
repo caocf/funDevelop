@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd"
+	   default-lazy-init="false">
+
+	<description>支付服务配置配置</description>
+
+	<context:property-placeholder ignore-unresolvable="true" ignore-resource-not-found="true"
+								  location="classpath*:/fun-inner-application.properties,classpath*:/application.properties" />
+
+	<!-- initData（初始化）环境 -->
+	<beans profile="initData" default-lazy-init="false">
+		<!-- 初始化数据表结构 与默认数据-->
+		<jdbc:initialize-database data-source="dataSourceMaster" ignore-failures="NONE">
+			<jdbc:script location="classpath*:/sql/${db.type}/payment-fun-schema.sql" encoding="UTF-8" />
+		</jdbc:initialize-database>
+	</beans>
+</beans>

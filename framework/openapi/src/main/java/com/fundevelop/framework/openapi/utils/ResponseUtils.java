@@ -4,7 +4,6 @@ import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.commons.utils.StringUtils;
 import com.fundevelop.commons.web.utils.IpUtils;
 import com.fundevelop.commons.web.utils.PropertyUtil;
-import com.fundevelop.framework.base.config.ServerConfUtils;
 import com.fundevelop.framework.openapi.exception.RestException;
 import com.fundevelop.framework.openapi.model.RestError;
 import com.fundevelop.framework.openapi.model.RestErrorV2;
@@ -54,7 +53,7 @@ public class ResponseUtils {
         if (restRequest.isDebug() && !restRequest.getReplaceParams().isEmpty()) {
             response.setResponse(restRequest.getReplaceParams());
 
-            logger.warn("cmd处理出现异常，启用调试模式直接返回前端构造数据", ex);
+            logger.warn("cmd处理出现异常，启用调试模式直接返回前端构造数据, cmd:{}", restRequest.getCmd(), ex);
         } else {
             RestError error;
 
@@ -70,6 +69,7 @@ public class ResponseUtils {
                 }
 
                 response.setStatusCode(error.getErrorCode());
+                logger.warn("cmd处理时参数校验不合法, cmd:{}", restRequest.getCmd());
             } else if (ex instanceof RestException) {
                 if (useV2) {
                     response.setStatusCode(((RestException) ex).getErrorCode());
@@ -78,6 +78,7 @@ public class ResponseUtils {
                     error = new RestError((RestException) ex);
                     response.setStatusCode(error.getErrorCode());
                 }
+                logger.warn("cmd处理时业务校验不通过, cmd:{}", restRequest.getCmd());
             } else {
                 String errorMsg = PropertyUtil.get("fun.openapi.error.500", "服务器开小差了~~~");
                 if (useV2) {
@@ -87,11 +88,11 @@ public class ResponseUtils {
                 }
 
                 response.setStatusCode(error.getErrorCode());
+
+                logger.error("cmd:({})处理出现异常", restRequest.getCmd(), ex);
             }
 
             response.setError(error);
-
-            logger.error("cmd处理出现异常", ex);
         }
 
         logResponse(restRequest, response);

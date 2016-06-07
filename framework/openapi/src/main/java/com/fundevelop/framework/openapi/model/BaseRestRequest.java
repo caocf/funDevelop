@@ -1,5 +1,7 @@
 package com.fundevelop.framework.openapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -10,6 +12,7 @@ public class BaseRestRequest {
     protected RestRequest restRequest;
     protected HttpServletRequest httpRequest;
 
+    @JsonIgnore
     public RestRequest getRestRequest() {
         return restRequest;
     }
@@ -18,6 +21,7 @@ public class BaseRestRequest {
         this.restRequest = restRequest;
     }
 
+    @JsonIgnore
     public HttpServletRequest getHttpRequest() {
         return httpRequest;
     }

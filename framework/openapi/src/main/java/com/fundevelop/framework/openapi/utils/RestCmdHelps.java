@@ -105,10 +105,8 @@ public class RestCmdHelps extends InstantiationAwareBeanPostProcessorAdapter imp
         if (restRequest.getFiles()!=null && restRequest.getFiles().length>0) {
             try {
                 Method setFilesMethod = businessRequest.getClass().getMethod("setFiles", MultipartFile[].class);
-
-                if (setFilesMethod != null) {
-                    setFilesMethod.invoke(businessRequest, restRequest.getFiles());
-                }
+                setFilesMethod.invoke(businessRequest, restRequest.getFiles());
+            } catch (NoSuchMethodException ex) {
             } catch (Exception ex) {
                 logger.warn("向CMD服务注入上传文件发生异常", ex);
             }

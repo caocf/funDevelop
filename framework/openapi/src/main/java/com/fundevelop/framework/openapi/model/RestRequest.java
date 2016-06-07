@@ -24,7 +24,6 @@ public class RestRequest {
     private Map<String, Object> replaceParams = new HashMap<>(); // 使用静态资源时替换参数
     private String token; // 用户的token
     private String appPushToken; //用于推送消息的ID
-    private Integer cityId; // 城市ID
     private String resolution; // 分辨率
     private String locationXy; // 经纬度
     private Map<String, Object> deviceInfo = new HashMap<>(); // 设备型号
@@ -67,14 +66,6 @@ public class RestRequest {
 
     public void setCmd(String cmd) {
         this.cmd = cmd;
-    }
-
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
     }
 
     public String getResolution() {
@@ -219,7 +210,6 @@ public class RestRequest {
                 .append("parameters", parameters)
                 .append("token", token)
                 .append("appPushToken", appPushToken)
-                .append("cityId", cityId)
                 .append("resolution", resolution)
                 .append("locationXy", locationXy)
                 .append("deviceInfo", deviceInfo)
