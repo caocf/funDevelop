@@ -105,13 +105,14 @@ public class DefaultDataModuleHandling {
 
             if (StringUtils.isNotBlank(sidx)) {
                 jqGridOrderStr = sidx.trim();
-            }
-            if (StringUtils.isNotBlank(sord)) {
-                if (StringUtils.isNotBlank(jqGridOrderStr)) {
-                    jqGridOrderStr += ",";
-                }
 
-                jqGridOrderStr += sord.trim();
+                if (StringUtils.isNotBlank(sord)) {
+                    if (StringUtils.isNotBlank(jqGridOrderStr)) {
+                        jqGridOrderStr += ",";
+                    }
+
+                    jqGridOrderStr += sord.trim();
+                }
             }
 
             return jqGridOrderStr;

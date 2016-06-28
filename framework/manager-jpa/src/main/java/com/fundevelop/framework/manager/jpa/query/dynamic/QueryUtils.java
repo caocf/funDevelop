@@ -171,4 +171,6 @@ public class QueryUtils {
 
     /** 查询计划参数名称. */
     public static String PLAN = "PLAN";
+    /** 去重查询参数名称 */
+    public static String DISTINCT_QUERY = "DISTINCT";
 }

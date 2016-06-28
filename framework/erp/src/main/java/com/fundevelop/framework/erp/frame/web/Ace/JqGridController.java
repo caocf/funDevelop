@@ -1,5 +1,6 @@
 package com.fundevelop.framework.erp.frame.web.Ace;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fundevelop.commons.utils.BeanUtils;
 import com.fundevelop.framework.erp.frame.FrameDataModel;
 import com.fundevelop.framework.erp.frame.web.Ace.model.JqGridFilter;
@@ -44,7 +45,11 @@ public abstract class JqGridController<T extends BaseEntity<ID>, ID extends Seri
             }
         } catch (Exception e) {
             long timeMillis = System.currentTimeMillis();
-            logger.error("保存实体失败, tm={}, entity={}", timeMillis, entity, e);
+            try {
+                logger.error("保存实体失败, tm={}, entity={}", timeMillis, BeanUtils.toJson(entity), e);
+            } catch (JsonProcessingException e1) {
+                logger.error("保存实体失败, tm={}", timeMillis, e);
+            }
             return new StatusResponse(500, "系统内部错误, 错误标示：" + timeMillis);
         }
 
@@ -69,7 +74,7 @@ public abstract class JqGridController<T extends BaseEntity<ID>, ID extends Seri
             try {
                 return (ID)BeanUtils.convertValue(entityKeyClazz ,jqId);
             } catch (Exception e) {
-                logger.error("对JqGrid ID进行数据类型转换时发生异常,jqId:{},id数据类型:{}", jqId, entityKeyClazz, e);
+                logger.error("对JqGrid ID进行数据类型转换时发生异常,jqId:{},id数据类型:{}", jqId, entityKeyClazz.getName(), e);
                 throw new RuntimeException(e);
             }
         }

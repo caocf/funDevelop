@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +44,8 @@ public class UploadController extends BaseController {
             @RequestParam(value = "clientIdentifierCode", required = false) String clientIdentifierCode,
             @RequestParam(value = "runningMode", required = false) String runningMode,
             @RequestParam(value = "appDomain", required = false) String appDomain,
-            HttpServletRequest httpRequest) throws IOException {
+            @RequestParam(value = "temporary-iframe-id", required = false) String iframeId,
+            HttpServletRequest httpRequest, HttpServletResponse response) throws IOException {
         RestRequest restRequest = new RestRequest();
         restRequest.setFiles(files);
         restRequest.setCmd(cmd);
@@ -60,7 +63,20 @@ public class UploadController extends BaseController {
         restRequest.setRunningMode(runningMode);
         restRequest.setAppDomain(appDomain);
 
-        return handleRequest(restRequest, httpRequest);
+        RestResponse restResponse = handleRequest(restRequest, httpRequest);
+
+        if (StringUtils.isBlank(iframeId)) {
+            return restResponse;
+        }
+
+        PrintWriter out = response.getWriter();
+        String jsonString = BeanUtils.toJson(restResponse);
+        response.setContentType("text/html; charset=UTF-8");
+        out.println("<script language=\"javascript\" type=\"text/javascript\">");
+        out.println("parent.$(\"#"+iframeId+"\").data(\"deferrer\").resolve(" + jsonString + ");");
+        out.println("</script>");
+
+        return null;
     }
 
     private RestResponse handleRequest(final RestRequest restRequest, HttpServletRequest httpRequest) {

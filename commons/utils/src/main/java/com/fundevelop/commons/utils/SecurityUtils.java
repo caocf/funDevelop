@@ -1,7 +1,5 @@
 package com.fundevelop.commons.utils;
 
-import org.apache.commons.lang3.*;
-
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -42,6 +40,11 @@ public class SecurityUtils {
 
         return source;
     }
+
+    /** 用户账号密码错误 */
+    public static final String LOGIN_FAIL_INVALID_ACCOUNT = "1";
+    /** 用户被禁用 */
+    public static final String LOGIN_FAIL_DISABLED = "2";
 
     private SecurityUtils(){}
 }

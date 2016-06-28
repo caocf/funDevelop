@@ -24,6 +24,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -94,9 +96,9 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
     /**
      * 查询列表.
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "search")
     @ResponseBody
-    public FrameDataModel searchData(HttpServletRequest request) {
+    public Object searchData(HttpServletRequest request) {
         FrameDataModel dataModel = getDataModel(request, getId(request));
 
         Pageable pageRequest = buildPageRequest(request);
@@ -111,32 +113,33 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
             }
         }
 
-        return dataModel;
+        return dataModel.getResponse();
     }
 
     /**
      * 使用查询计划进行动态查询.
      */
-    @RequestMapping(value = "dsearch", method = RequestMethod.POST)
+    @RequestMapping(value = "dsearch")
     @ResponseBody
-    public FrameDataModel dynamicSearch(HttpServletRequest request) {
+    public Object dynamicSearch(HttpServletRequest request) {
         Class queryBean = QueryUtils.getQueryPlan(this.getClass(), request.getParameter(WebSearchHelper.searchPre+QueryUtils.PLAN));
         if (queryBean != null) {
             FrameDataModel dataModel = getDataModel(queryBean, null, request);
+            boolean distinctQuery = com.fundevelop.commons.utils.StringUtils.isBooleanTrue(request.getParameter(WebSearchHelper.searchPre+QueryUtils.DISTINCT_QUERY));
 
             Pageable pageRequest = buildPageRequest(request, false);
 
             if (pageRequest == null) {
-                dataModel.setData(QueryUtils.doListQuery(buildSearchFilter(request), pageRequest, entityManager, queryBean));
+                dataModel.setData(QueryUtils.doListQuery(buildSearchFilter(request), pageRequest, entityManager, queryBean, distinctQuery));
             } else {
                 if (isSortOnly(request)) {
-                    dataModel.setData(QueryUtils.doListQuery(buildSearchFilter(request), pageRequest.getSort(), entityManager, queryBean));
+                    dataModel.setData(QueryUtils.doListQuery(buildSearchFilter(request), pageRequest.getSort(), entityManager, queryBean, distinctQuery));
                 } else {
-                    dataModel.setData((Page) QueryUtils.doQuery(buildSearchFilter(request), pageRequest, entityManager, queryBean));
+                    dataModel.setData((Page) QueryUtils.doQuery(buildSearchFilter(request), pageRequest, entityManager, queryBean, distinctQuery));
                 }
             }
 
-            return dataModel;
+            return dataModel.getResponse();
         } else {
             throw new RuntimeException("找不到指定的查询计划");
         }
@@ -228,14 +231,18 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
      * 构建查询条件.
      */
     protected List<SearchFilter> buildSearchFilter(HttpServletRequest request) {
-        return (List<SearchFilter>) SearchUtils.parse(WebSearchHelper.getParametersStartingWith(request, WebSearchHelper.searchPre)).values();
+        Collection<SearchFilter> filters = SearchUtils.parse(WebSearchHelper.getParametersStartingWith(request, WebSearchHelper.searchPre)).values();
+        List<SearchFilter> searchFilters = new ArrayList<>(filters.size());
+        searchFilters.addAll(filters);
+
+        return searchFilters;
     }
 
     /**
      * 构建分页条件.
      */
     protected Pageable buildPageRequest(HttpServletRequest request) {
-        return buildPageRequest(request, true);
+        return buildPageRequest(request, false);
     }
 
     /**
@@ -302,7 +309,7 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
             try {
                 return (ID) BeanUtils.convertValue(entityKeyClazz ,id);
             } catch (Exception e) {
-                logger.error("对id进行数据类型转换时发生异常,id:{},id数据类型:{}", id, entityKeyClazz, e);
+                logger.error("对id进行数据类型转换时发生异常,id:{},id数据类型:{}", id, entityKeyClazz.getName(), e);
                 throw new RuntimeException(e);
             }
         }

@@ -107,6 +107,7 @@ public class DefaultDataModel<T extends BaseEntity<ID>, ID extends Serializable>
     }
 
     @Override
+    @JsonIgnore
     public Object getResponse() {
         return isUseDataOfRoot()?data:this;
     }

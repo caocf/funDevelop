@@ -26,6 +26,8 @@
         <!-- web -->
         <servlet-api.version>2.5</servlet-api.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+
+        <shiro.version>1.2.3</shiro.version>
     </properties>
 
     <dependencies>
@@ -54,5 +56,40 @@
             <scope>provided</scope>
         </dependency>
         <!-- web end -->
+
+        <!-- SHIRO begin -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>${shiro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- SHIRO end -->
     </dependencies>
 </project>
