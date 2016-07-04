@@ -32,6 +32,7 @@ public class JacksonBean implements BeanFilter {
     }
 
     @Override
+    @JsonIgnore
     public Map<String, JavaType> getTypes() {
         return types;
     }

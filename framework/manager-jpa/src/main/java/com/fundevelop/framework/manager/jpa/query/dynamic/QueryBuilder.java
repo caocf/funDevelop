@@ -115,12 +115,10 @@ public class QueryBuilder {
         String fromSql = tableAliasMap.get(mainTableAlias) + " " + mainTableAlias;
         // 处理关联表
         processLinkTable();
+        // 处理其他表
+        fromSql += getJoinTables();
         // 处理左关联表
         fromSql += getLeftJoinTables();
-        // 处理其他表
-        if (fromTables.size() > 0) {
-            fromSql += "," + StringUtils.join(fromTables, ",");
-        }
 
         sql.append("select ").append(distinct?"distinct ":"").append(StringUtils.join(selectColumns, ","));
         sql.append(" from ").append(fromSql);
@@ -156,7 +154,6 @@ public class QueryBuilder {
         }
 
         sql.append(sortSql);
-
 
         Query query = entityManager.createNativeQuery(sql.toString());
 
@@ -205,6 +202,25 @@ public class QueryBuilder {
         }
 
         return query;
+    }
+
+    /**
+     * 获取右连接的表.
+     */
+    private String getJoinTables() {
+        StringBuffer joinTable = new StringBuffer("");
+
+        if (fromTables.size() > 0) {
+            if (usedLeftJoinTables.size() > 0) {
+                for (String table : fromTables) {
+                    joinTable.append(" join ").append(table).append(" ");
+                }
+            } else {
+                joinTable.append("," + StringUtils.join(fromTables, ","));
+            }
+        }
+
+        return joinTable.toString();
     }
 
     /**
@@ -426,9 +442,7 @@ public class QueryBuilder {
 
                         if (!mainTableAlias.equals(subTableAlias)) {
                             if (leftJoinTables.contains(subTableAlias)) {
-                                if (!usedLeftJoinTables.contains(subTableAlias)) {
-                                    usedLeftJoinTables.add(subTableAlias);
-                                }
+                                processLeftJoinTable(subTableAlias);
                             } else if (!fromTables.contains(fromTable)) {
                                 usedTables.add(subTableAlias);
                                 fromTables.add(fromTable);
@@ -444,9 +458,7 @@ public class QueryBuilder {
 
                 if (!mainTableAlias.equals(jtAlias)) {
                     if (leftJoinTables.contains(jtAlias)) {
-                        if (!usedLeftJoinTables.contains(jtAlias)) {
-                            usedLeftJoinTables.add(jtAlias);
-                        }
+                        processLeftJoinTable(jtAlias);
                     } else if (!fromTables.contains(fromTable)) {
                         usedTables.add(jtAlias);
                         fromTables.add(fromTable);
@@ -456,6 +468,31 @@ public class QueryBuilder {
 
                 selectColumns.add(processColumn(strategy.columnName(columnName),alias) + " as " + strategy.columnName(parentFieldname.replace(".", "_")+field.getName()));
             }
+        }
+    }
+
+    /**
+     * 处理左连接表顺序.
+     */
+    private void processLeftJoinTable(String tableAlias) {
+        if (!usedLeftJoinTables.contains(tableAlias)) {
+            if (joinTableMap.containsKey(tableAlias)) {
+                List<String> linkTables = joinTableMap.get(tableAlias);
+
+                for (String linkTable : linkTables) {
+                    if (!usedTables.contains(linkTable) && !usedLeftJoinTables.contains(linkTable)) {
+                        String fromTable = tableAliasMap.get(linkTable) + " " + linkTable;
+
+                        if (!mainTableAlias.equals(linkTable)) {
+                            if (leftJoinTables.contains(linkTable)) {
+                                processLeftJoinTable(linkTable);
+                            }
+                        }
+                    }
+                }
+            }
+
+            usedLeftJoinTables.add(tableAlias);
         }
     }
 
@@ -655,9 +692,7 @@ public class QueryBuilder {
 
                     if (!mainTableAlias.equals(jtAlias)) {
                         if (leftJoinTables.contains(jtAlias)) {
-                            if (!usedLeftJoinTables.contains(jtAlias)) {
-                                usedLeftJoinTables.add(jtAlias);
-                            }
+                            processLeftJoinTable(jtAlias);
                         } else if (!fromTables.contains(fromTable)) {
                             usedTables.add(jtAlias);
                             fromTables.add(fromTable);
@@ -707,9 +742,7 @@ public class QueryBuilder {
 
                         if (!mainTableAlias.equals(jtAlias)) {
                             if (leftJoinTables.contains(jtAlias)) {
-                                if (!usedLeftJoinTables.contains(jtAlias)) {
-                                    usedLeftJoinTables.add(jtAlias);
-                                }
+                                processLeftJoinTable(jtAlias);
                             } else if (!fromTables.contains(fromTable)) {
                                 usedTables.add(jtAlias);
                                 fromTables.add(fromTable);
@@ -740,9 +773,7 @@ public class QueryBuilder {
 
                 if (!mainTableAlias.equals(jtAlias)) {
                     if (leftJoinTables.contains(jtAlias)) {
-                        if (!usedLeftJoinTables.contains(jtAlias)) {
-                            usedLeftJoinTables.add(jtAlias);
-                        }
+                        processLeftJoinTable(jtAlias);
                     } else if (!fromTables.contains(fromTable)) {
                         usedTables.add(jtAlias);
                         fromTables.add(fromTable);
@@ -861,11 +892,25 @@ public class QueryBuilder {
 
         if (StringUtils.isNotBlank(whereEpr)) {
             if (isLeftJoinTableColumn) {
-                if (!usedLeftJoinTables.isEmpty() && fieldName.indexOf(".") != -1) {
-                    String jtAlias = fieldName.split("[.]")[0];
+                if (!usedLeftJoinTables.isEmpty()) {
+                    if (fieldName.indexOf(".") != -1) {
+                        String jtAlias = fieldName.split("[.]")[0];
 
-                    if (usedLeftJoinTables.contains(jtAlias)) {
-                        addFilterToLeftJoinColumns(jtAlias, whereEpr);
+                        if (usedLeftJoinTables.contains(jtAlias)) {
+                            addFilterToLeftJoinColumns(jtAlias, whereEpr);
+                        }
+                    } else {
+                        Map<String, Field> fieldMap = getFieldMap(returnType);
+                        Object[] fields = processField(fieldMap, fieldName, mainTableAlias, "");
+                        String fName = (String)fields[1];
+
+                        if (fName.indexOf(".") != -1) {
+                            String jtAlias = fName.split("[.]")[0];
+
+                            if (usedLeftJoinTables.contains(jtAlias)) {
+                                addFilterToLeftJoinColumns(jtAlias, whereEpr);
+                            }
+                        }
                     }
                 }
 

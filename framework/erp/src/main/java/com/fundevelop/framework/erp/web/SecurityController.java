@@ -1,7 +1,10 @@
 package com.fundevelop.framework.erp.web;
 
 import com.fundevelop.commons.utils.SecurityUtils;
+import com.fundevelop.framework.erp.security.shiro.SysUserCheck;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +20,13 @@ import java.util.Map;
 public class SecurityController {
     @RequestMapping(value = "/login")
     @ResponseBody
-    public Map<String, Object> login(String error) {
+    public Object login(String error) {
+        Subject subject = org.apache.shiro.SecurityUtils.getSubject();
+
+        if (subject != null && subject.isAuthenticated()) {
+            return sysUserCheck.getLoginResponse((String)subject.getPrincipal());
+        }
+
         Map<String, Object> response = new HashMap<>(1);
         Map<String, Object> security = new HashMap<>(2);
 
@@ -43,4 +52,7 @@ public class SecurityController {
 
         return response;
     }
+
+    @Autowired
+    private SysUserCheck sysUserCheck;
 }

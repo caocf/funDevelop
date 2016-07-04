@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sms</artifactId>
+        <artifactId>fundevelop-plugin-sms</artifactId>
         <groupId>fundevelop.plugin</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.plugin.sms</groupId>
-    <artifactId>jianzhou</artifactId>
+    <artifactId>fundevelop-plugin-sms-jianzhou</artifactId>
     <packaging>jar</packaging>
     <name>快速开发::插件::短信::建周科技</name>
 
@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>fundevelop.plugin.sms</groupId>
-            <artifactId>main</artifactId>
+            <artifactId>fundevelop-plugin-sms-main</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jianzhou</groupId>

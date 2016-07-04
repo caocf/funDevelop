@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>persistence</artifactId>
+        <artifactId>fundevelop-persistence</artifactId>
         <groupId>fundevelop</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.persistence</groupId>
-    <artifactId>jpa-dao</artifactId>
+    <artifactId>fundevelop-persistence-jpa-dao</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>快速开发::持久化::DAO::JPA</name>
@@ -34,12 +34,12 @@
     <dependencies>
         <dependency>
             <groupId>fundevelop.persistence</groupId>
-            <artifactId>hibernate-entity</artifactId>
+            <artifactId>fundevelop-persistence-hibernate-entity</artifactId>
             <version>${fundevelop-persistence-entity.version}</version>
         </dependency>
         <dependency>
             <groupId>fundevelop.commons</groupId>
-            <artifactId>web-utils</artifactId>
+            <artifactId>fundevelop-commons-web-utils</artifactId>
             <version>${fundevelop-commons-web-utils.version}</version>
         </dependency>
 

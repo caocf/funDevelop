@@ -199,7 +199,9 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
     public void delete(Iterable<T> entities){
         Assert.notNull(entities, "要删除的实体不能为空");
 
-        getDao().delete(entities);
+        for (T entity : entities) {
+            delete(entity);
+        }
     }
 
     /**
@@ -223,7 +225,11 @@ public abstract class AbstractManager<T extends BaseEntity<ID>, ID extends Seria
      */
     @Transactional
     public Iterable<T> save(Iterable<T> entities){
-        return getDao().save(entities);
+        for (T entity : entities) {
+            save(entity);
+        }
+
+        return entities;
     }
 
     /**

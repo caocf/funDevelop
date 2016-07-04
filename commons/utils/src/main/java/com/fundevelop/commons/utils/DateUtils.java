@@ -34,6 +34,8 @@ public class DateUtils {
      * @throws Exception
      */
     public static final Date toDate(Object value) throws Exception {
+        if (value == null) return null;
+
         Date result = null;
 
         if (value instanceof String) {
@@ -69,6 +71,8 @@ public class DateUtils {
      * @return 对应的Date对象
      */
     public static final Date toDate(Object value, String pattern) {
+        if (value == null) return null;
+
         Date result = null;
 
         if (value instanceof String) {

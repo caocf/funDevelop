@@ -94,17 +94,19 @@ public class JsTreeModel<T extends BaseEntity<ID>,ID extends Serializable> exten
 
         Boolean selected = null;
 
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(selectAttrName)) {
-            try {
-                Class<?> toType = BeanUtils.findPropertyType(selectAttrName, new Class[]{bean.getClass()});
+        if (!child) {
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(selectAttrName)) {
+                try {
+                    Class<?> toType = BeanUtils.findPropertyType(selectAttrName, new Class[]{bean.getClass()});
 
-                if (toType == Boolean.class) {
-                    selected = (Boolean)Ognl.getValue(selectAttrName, bean, toType);
-                } else {
-                    selected = StringUtils.isBooleanTrue(Ognl.getValue(selectAttrName, bean, toType).toString());
+                    if (toType == Boolean.class) {
+                        selected = (Boolean) Ognl.getValue(selectAttrName, bean, toType);
+                    } else {
+                        selected = StringUtils.isBooleanTrue(Ognl.getValue(selectAttrName, bean, toType).toString());
+                    }
+                } catch (OgnlException e) {
+                    throw new RuntimeException("从实体类[" + bean.getClass() + "." + selectAttrName + "]中获取节点是否选中属性失败", e);
                 }
-            } catch (OgnlException e) {
-                throw new RuntimeException("从实体类["+bean.getClass()+"."+selectAttrName+"]中获取节点是否选中属性失败",e);
             }
         }
 
@@ -118,7 +120,7 @@ public class JsTreeModel<T extends BaseEntity<ID>,ID extends Serializable> exten
 
             return item;
         } catch (OgnlException e) {
-            throw new RuntimeException("从实体类["+bean.getClass()+"."+textAttrName+"]中获取节点名称失败",e);
+            throw new RuntimeException("从实体类[" + bean.getClass() + "." + textAttrName + "]中获取节点名称失败", e);
         }
     }
 

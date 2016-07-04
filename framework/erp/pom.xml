@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>framework</artifactId>
+        <artifactId>fundevelop-framework</artifactId>
         <groupId>fundevelop</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.framework</groupId>
-    <artifactId>erp</artifactId>
+    <artifactId>fundevelop-framework-erp</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>快速开发::框架::ERP</name>
@@ -33,12 +33,12 @@
     <dependencies>
         <dependency>
             <groupId>fundevelop.framework</groupId>
-            <artifactId>service-base</artifactId>
+            <artifactId>fundevelop-framework-service-base</artifactId>
             <version>${fundevelop-framework-service-base.version}</version>
         </dependency>
         <dependency>
             <groupId>fundevelop.framework</groupId>
-            <artifactId>manager-jpa</artifactId>
+            <artifactId>fundevelop-framework-manager-jpa</artifactId>
             <version>${fundevelop-framework-manager-jpa.version}</version>
         </dependency>
 

@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>plugin</artifactId>
+        <artifactId>fundevelop-plugin</artifactId>
         <groupId>fundevelop</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.plugin</groupId>
-    <artifactId>sms</artifactId>
+    <artifactId>fundevelop-plugin-sms</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <modules>
@@ -30,12 +30,12 @@
         <dependencies>
             <dependency>
                 <groupId>fundevelop.plugin.sms</groupId>
-                <artifactId>main</artifactId>
+                <artifactId>fundevelop-plugin-sms-main</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>fundevelop.plugin.sms</groupId>
-                <artifactId>ctc-smscloud</artifactId>
+                <artifactId>fundevelop-plugin-sms-ctc-smscloud</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

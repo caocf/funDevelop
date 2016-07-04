@@ -16,6 +16,11 @@ public interface SysUserCheck {
     SysUserToken getUser(String loginName, String password);
 
     /**
+     * 获取用户登录返回信息.
+     */
+    Object getLoginResponse(String userId);
+
+    /**
      * 根据用户ID获取用户.
      */
     SysUserToken getByUserId(String userId);

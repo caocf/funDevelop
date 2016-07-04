@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cache</artifactId>
+    <artifactId>fundevelop-cache</artifactId>
     <packaging>pom</packaging>
     <name>快速开发::缓存</name>
     <version>1.0.0-SNAPSHOT</version>

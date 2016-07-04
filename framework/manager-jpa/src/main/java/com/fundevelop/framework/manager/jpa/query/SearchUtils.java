@@ -28,7 +28,7 @@ public class SearchUtils {
             // 拆分operator与filedAttribute
             String[] names = StringUtils.split(key, "_");
             if (names.length != 2) {
-                throw new IllegalArgumentException(key + " 不是有效的查询过滤属性名");
+                continue;
             }
 
             String filedName = names[1];
