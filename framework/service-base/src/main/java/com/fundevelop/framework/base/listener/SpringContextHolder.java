@@ -2,6 +2,7 @@ package com.fundevelop.framework.base.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -48,6 +49,17 @@ public class SpringContextHolder implements ServletContextListener {
         }
 
         return ctx.getBean(requiredType);
+    }
+
+    /**
+     * 从Spring中获取Bean.
+     */
+    public static <T> Map<String, T> getBeans(Class<T> type) {
+        if (ctx == null) {
+            throw new IllegalStateException("applicaitonContext未注入，等待应用启动完成后再进行调用");
+        }
+
+        return ctx.getBeansOfType(type);
     }
 
     /**

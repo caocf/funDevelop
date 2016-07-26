@@ -19,13 +19,15 @@ import java.util.Date;
 public class OrderNoManager extends AbstractManager<OrderNoEntity, Long, OrderNoDao> {
     /**
      * 获取订单号.
+     * @param orderType 订单类型
      * @param hightCode 高位码
      * @param length 订单号长度
      */
     @Transactional
-    public String createOrderNo(String hightCode, int length) {
+    public String createOrderNo(String orderType, String hightCode, int length) {
         String lowCode = DateUtils.toString(new Date(), "yyyyMMdd");
         OrderNoEntity orderNoEntity = new OrderNoEntity();
+        orderNoEntity.setOrderType(orderType);
         orderNoEntity.setHightCode(hightCode);
         orderNoEntity.setLowCode(lowCode);
 

@@ -18,6 +18,12 @@ public class PaymentInfo implements Serializable {
     private String desc;
     /** 订单号. */
     private String orderNo;
+    /** 订单类型. */
+    private String orderType;
+
+
+    /** 微信支付交易类型 */
+    private String tradeType;
 
     public String getProductName() {
         return productName;
@@ -57,5 +63,21 @@ public class PaymentInfo implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
     }
 }

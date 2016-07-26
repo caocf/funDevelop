@@ -8,4 +8,5 @@ import com.fundevelop.persistence.jpa.BaseDao;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/5/14 1:33
  */
 public interface ReconciliationDao extends BaseDao<ReconciliationEntity, Long> {
+    ReconciliationEntity getByOrderNo(String orderNo);
 }

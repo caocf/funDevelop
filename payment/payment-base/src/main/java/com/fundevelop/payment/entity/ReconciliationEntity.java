@@ -11,38 +11,28 @@ import java.util.Date;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/5/14 1:17
  */
 @Entity
-@Table(name = "fun_fin_reconciliation")
+@Table(name = "fun_payment_reconciliation")
 public class ReconciliationEntity extends LongIDEntity {
     /** 订单类型. */
     private String orderType;
     /** 订单编号. */
     private String orderNo;
-    /** 订单ID. */
-    private Long orderId;
     /** 商品名称. */
     private String orderProductName;
-    /** 订单支付状态. */
+    /** 订单支付状态(1:等待支付,2:已支付,3:取消,4:过期). */
     private String payStatus;
-    /** 支付金额. */
-    private Long orderAmount;
+    /** 订单金额（单位分）. */
+    private Integer orderAmount;
+    /** 支付金额（单位分）. */
+    private Integer orderPayAmount;
     /** 支付时间. */
     private Date orderPayTime;
-    /** 下单时间. */
+    /** 首次发起支付时间. */
     private Date orderCreateTime;
     /** 支付平台. */
     private String platform;
-    /** 支付用户ID. */
-    private Long userId;
-    /** 提供服务用户ID */
-    private Long targetUserId;
     /** 平台支付流水号. */
     private String paySerialNumber;
-    /** 退款时间. */
-    private Date refundTime;
-    /** 退款金额. */
-    private Double refundAmount;
-    /** 退款流水号. */
-    private String refundSerialNumber;
     /** 对账时间. */
     private Date checkTime;
     /** 对账状态. */
@@ -66,14 +56,6 @@ public class ReconciliationEntity extends LongIDEntity {
         this.orderNo = orderNo;
     }
 
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
     public String getOrderProductName() {
         return orderProductName;
     }
@@ -90,12 +72,20 @@ public class ReconciliationEntity extends LongIDEntity {
         this.payStatus = payStatus;
     }
 
-    public Long getOrderAmount() {
+    public Integer getOrderAmount() {
         return orderAmount;
     }
 
-    public void setOrderAmount(Long orderAmount) {
+    public void setOrderAmount(Integer orderAmount) {
         this.orderAmount = orderAmount;
+    }
+
+    public Integer getOrderPayAmount() {
+        return orderPayAmount;
+    }
+
+    public void setOrderPayAmount(Integer orderPayAmount) {
+        this.orderPayAmount = orderPayAmount;
     }
 
     public Date getOrderPayTime() {
@@ -122,52 +112,12 @@ public class ReconciliationEntity extends LongIDEntity {
         this.platform = platform;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getTargetUserId() {
-        return targetUserId;
-    }
-
-    public void setTargetUserId(Long targetUserId) {
-        this.targetUserId = targetUserId;
-    }
-
     public String getPaySerialNumber() {
         return paySerialNumber;
     }
 
     public void setPaySerialNumber(String paySerialNumber) {
         this.paySerialNumber = paySerialNumber;
-    }
-
-    public Date getRefundTime() {
-        return refundTime;
-    }
-
-    public void setRefundTime(Date refundTime) {
-        this.refundTime = refundTime;
-    }
-
-    public Double getRefundAmount() {
-        return refundAmount;
-    }
-
-    public void setRefundAmount(Double refundAmount) {
-        this.refundAmount = refundAmount;
-    }
-
-    public String getRefundSerialNumber() {
-        return refundSerialNumber;
-    }
-
-    public void setRefundSerialNumber(String refundSerialNumber) {
-        this.refundSerialNumber = refundSerialNumber;
     }
 
     public Date getCheckTime() {

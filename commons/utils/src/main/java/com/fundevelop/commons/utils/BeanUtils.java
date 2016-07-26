@@ -4,8 +4,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ognl.OgnlOps;
+import org.apache.commons.lang3.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.util.*;
 
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -37,6 +44,39 @@ public class BeanUtils {
         initJackson();
 
         return mapper.readValue(json, beanClass);
+    }
+
+    /**
+     * 将value写入bean中的propertyName属性.
+     * @param bean 待写入对象
+     * @param propertyName 待写入属性名
+     * @param value 要写入的值
+     */
+    public static void setProperty(Object bean, String propertyName, String value) {
+        if (bean != null && org.apache.commons.lang3.StringUtils.isNotBlank(propertyName)) {
+            PropertyDescriptor targetPd = org.springframework.beans.BeanUtils.getPropertyDescriptor(bean.getClass(), propertyName);
+
+            if (targetPd != null) {
+                Method writeMethod = targetPd.getWriteMethod();
+
+                if (writeMethod != null) {
+                    try {
+                        if (!Modifier.isPublic(writeMethod.getDeclaringClass().getModifiers())) {
+                            writeMethod.setAccessible(true);
+                        }
+                        if (value == null) {
+                            writeMethod.invoke(bean, null);
+                        } else {
+                            writeMethod.invoke(bean, convertValue(bean.getClass(), propertyName, value));
+                        }
+                    }
+                    catch (Throwable ex) {
+                        throw new FatalBeanException(
+                                "Could not set property '" + targetPd.getName() + "' to target", ex);
+                    }
+                }
+            }
+        }
     }
 
     /**

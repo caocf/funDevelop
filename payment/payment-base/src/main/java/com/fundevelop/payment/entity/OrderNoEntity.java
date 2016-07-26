@@ -10,7 +10,7 @@ import javax.persistence.Table;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/4/27 0:44
  */
 @Entity
-@Table(name = "fun_sys_orderno")
+@Table(name = "fun_payment_orderno")
 public class OrderNoEntity extends LongIDEntity {
     /** 高位码 */
     private String hightCode;
@@ -18,6 +18,8 @@ public class OrderNoEntity extends LongIDEntity {
     private String lowCode;
     /** 订单号 */
     private String orderNo;
+    /** 订单类型. */
+    private String orderType;
 
     public String getHightCode() {
         return hightCode;
@@ -41,5 +43,13 @@ public class OrderNoEntity extends LongIDEntity {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 }

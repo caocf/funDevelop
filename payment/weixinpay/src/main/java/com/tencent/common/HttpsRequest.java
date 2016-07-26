@@ -64,41 +64,50 @@ public class HttpsRequest implements IServiceRequest{
 
     private void init() throws IOException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException {
         String certLocalPath = PropertyUtil.get("payment.weixinpay.certLocalPath");
-        String certPassword = PropertyUtil.get("payment.weixinpay.certPassword");
 
-        if (StringUtils.isBlank(certLocalPath)) {
-            throw new RuntimeException("请在application.properties配置文件中配置payment.weixinpay.certLocalPath属性(微信支付HTTPS证书的本地路径)");
+        if (StringUtils.isNotBlank(certLocalPath)) {
+            String certPassword = PropertyUtil.get("payment.weixinpay.certPassword");
+
+            if (StringUtils.isBlank(certPassword)) {
+                certPassword = PropertyUtil.get("payment.weixinpay.mchId");
+            }
+
+            if (StringUtils.isBlank(certLocalPath)) {
+                throw new RuntimeException("请在application.properties配置文件中配置payment.weixinpay.certLocalPath属性(微信支付HTTPS证书的本地路径)");
+            }
+            if (StringUtils.isBlank(certPassword)) {
+                throw new RuntimeException("请在application.properties配置文件中配置payment.weixinpay.certPassword属性(微信支付HTTPS证书密码，默认密码等于商户号MCHID)");
+            }
+
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            FileInputStream instream = new FileInputStream(new File(SpringContextHolder.getRootPath(), certLocalPath));//加载本地的证书进行https加密传输
+            try {
+                keyStore.load(instream, certPassword.toCharArray());//设置证书密码
+            } catch (CertificateException e) {
+                logger.warn("微信支付加载证书发生异常，证书：{}", certLocalPath, e);
+            } catch (NoSuchAlgorithmException e) {
+                logger.warn("微信支付加载证书发生异常，证书：{}", certLocalPath, e);
+            } finally {
+                instream.close();
+            }
+
+            // Trust own CA and all self-signed certs
+            SSLContext sslcontext = SSLContexts.custom()
+                    .loadKeyMaterial(keyStore, certPassword.toCharArray())
+                    .build();
+            // Allow TLSv1 protocol only
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                    sslcontext,
+                    new String[]{"TLSv1"},
+                    null,
+                    SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+
+            httpClient = HttpClients.custom()
+                    .setSSLSocketFactory(sslsf)
+                    .build();
+        } else {
+            httpClient = HttpClients.custom().build();
         }
-        if (StringUtils.isBlank(certPassword)) {
-            throw new RuntimeException("请在application.properties配置文件中配置payment.weixinpay.certPassword属性(微信支付HTTPS证书密码，默认密码等于商户号MCHID)");
-        }
-
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File(SpringContextHolder.getRootPath(), certLocalPath));//加载本地的证书进行https加密传输
-        try {
-            keyStore.load(instream, certPassword.toCharArray());//设置证书密码
-        } catch (CertificateException e) {
-            logger.warn("微信支付加载证书发生异常，证书：{}", certLocalPath, e);
-        } catch (NoSuchAlgorithmException e) {
-            logger.warn("微信支付加载证书发生异常，证书：{}", certLocalPath, e);
-        } finally {
-            instream.close();
-        }
-
-        // Trust own CA and all self-signed certs
-        SSLContext sslcontext = SSLContexts.custom()
-                .loadKeyMaterial(keyStore,certPassword.toCharArray())
-                .build();
-        // Allow TLSv1 protocol only
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslcontext,
-                new String[]{"TLSv1"},
-                null,
-                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-
-        httpClient = HttpClients.custom()
-                .setSSLSocketFactory(sslsf)
-                .build();
 
         //根据默认超时限制初始化requestConfig
         requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeout).setConnectTimeout(connectTimeout).build();

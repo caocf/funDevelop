@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ReconciliationManager extends AbstractManager<ReconciliationEntity, Long, ReconciliationDao> {
+    public ReconciliationEntity getByOrderNo(String orderNo) {
+        return getDao().getByOrderNo(orderNo);
+    }
+
     @Override
     protected ReconciliationDao getDao() {
         return dao;

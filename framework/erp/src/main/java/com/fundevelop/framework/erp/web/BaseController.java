@@ -90,7 +90,17 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     @ResponseBody
     public T getDetail(@PathVariable("id") ID id) {
-        return (T)getManager().getByID(id);
+        T entity = (T)getManager().getByID(id);
+
+        if (entity != null) {
+            return entity;
+        }
+
+        try {
+            return entityClazz.newInstance();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

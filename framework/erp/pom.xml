@@ -22,6 +22,7 @@
         <!-- framework -->
         <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
         <fundevelop-framework-manager-jpa.version>1.0.0-SNAPSHOT</fundevelop-framework-manager-jpa.version>
+        <fundevelop-cache-redis.version>1.0.0-SNAPSHOT</fundevelop-cache-redis.version>
 
         <!-- web -->
         <servlet-api.version>2.5</servlet-api.version>
@@ -40,6 +41,11 @@
             <groupId>fundevelop.framework</groupId>
             <artifactId>fundevelop-framework-manager-jpa</artifactId>
             <version>${fundevelop-framework-manager-jpa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fundevelop.cache</groupId>
+            <artifactId>fundevelop-cache-redis</artifactId>
+            <version>${fundevelop-cache-redis.version}</version>
         </dependency>
 
         <!-- web begin -->

@@ -1,11 +1,13 @@
 package com.fundevelop.framework.erp.security.shiro;
 
+import com.fundevelop.commons.web.utils.PropertyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,27 @@ import java.io.IOException;
 @Component
 public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    public static final String DEFAULT_CAPTCHA_PARAM = "captcha";
+    public static final String DEFAULT_CLIENT_CODE_PARAM = "clientCode";
+    private String captchaParam = DEFAULT_CAPTCHA_PARAM;
+    private static String clientCodeParam = DEFAULT_CLIENT_CODE_PARAM;
+
+    public String getCaptchaParam() {
+        return captchaParam;
+    }
+
+    public void setCaptchaParam(String captchaParam) {
+        this.captchaParam = captchaParam;
+    }
+
+    public static String getClientCodeParam() {
+        return clientCodeParam;
+    }
+
+    public void setClientCodeParam(String clientCodeParam) {
+        ShiroFormAuthenticationFilter.clientCodeParam = clientCodeParam;
+    }
 
     @Override
     protected boolean onLoginSuccess(AuthenticationToken token,
@@ -82,6 +105,30 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
         }
 
         return subject.isAuthenticated();
+    }
+
+    @Override
+    protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
+        if (com.fundevelop.commons.utils.StringUtils.isBooleanTrue(PropertyUtil.get("erp.sysuser.login.useCaptcha", "0"))) {
+            String username = getUsername(request);
+            String password = getPassword(request);
+            String captcha = getCaptcha(request);
+            String clientCode = getClientCode(request);
+            boolean rememberMe = isRememberMe(request);
+            String host = getHost(request);
+
+            return new UsernamePasswordCaptchaToken(username, password, rememberMe, host, captcha, clientCode);
+        } else {
+            return super.createToken(request, response);
+        }
+    }
+
+    protected String getCaptcha(ServletRequest request) {
+        return WebUtils.getCleanParam(request, getCaptchaParam());
+    }
+
+    protected String getClientCode(ServletRequest request) {
+        return WebUtils.getCleanParam(request, getClientCodeParam());
     }
 
     @Autowired

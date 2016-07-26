@@ -17,5 +17,6 @@
     <modules>
         <module>payment-base</module>
         <module>weixinpay</module>
+        <module>alipay</module>
     </modules>
 </project>

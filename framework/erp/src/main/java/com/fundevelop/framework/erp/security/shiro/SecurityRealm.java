@@ -1,5 +1,6 @@
 package com.fundevelop.framework.erp.security.shiro;
 
+import com.fundevelop.cache.redis.CaptchaUtils;
 import com.fundevelop.commons.utils.SecurityUtils;
 import com.fundevelop.commons.web.utils.PropertyUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 /**
- * .
+ * 验证用户.
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江) 创建于 16/6/11 15:05
  */
 public class SecurityRealm extends AuthorizingRealm {
@@ -51,6 +52,34 @@ public class SecurityRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
+        String captcha = null;
+        String clientCode = null;
+
+        if (com.fundevelop.commons.utils.StringUtils.isBooleanTrue(PropertyUtil.get("erp.sysuser.login.useCaptcha", "0"))) {
+            if (token instanceof UsernamePasswordCaptchaToken) {
+                captcha = ((UsernamePasswordCaptchaToken)token).getCaptcha();
+                clientCode = ((UsernamePasswordCaptchaToken)token).getClientCode();
+
+                if (captcha == null) {
+                    captcha = "";
+                }
+            }
+        }
+
+        if (captcha != null) {
+            if (StringUtils.isBlank(clientCode)) {
+                logger.error("开启图片验证登录功能,登录时没有提交终端识别码参数:clientCode");
+                throw new AuthenticationException(SecurityUtils.LOGIN_FAIL_INVALID_CAPTCHA);
+            }
+
+            String relCaptchaCode = CaptchaUtils.getCaptcha(clientCode);
+
+            if (!StringUtils.equals(captcha, relCaptchaCode)) {
+                logger.warn("图片验证码不正确，客户端唯一标示：{}，验证码：{}，正确验证码：{}",  clientCode, captcha, relCaptchaCode);
+                throw new AuthenticationException(SecurityUtils.LOGIN_FAIL_INVALID_CAPTCHA);
+            }
+        }
+
         String username = usernamePasswordToken.getUsername();
         String password = new String(usernamePasswordToken.getPassword());
         String md5PWD = password;

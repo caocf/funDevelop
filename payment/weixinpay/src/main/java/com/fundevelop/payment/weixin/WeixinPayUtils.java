@@ -15,8 +15,6 @@ import java.util.TreeMap;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/5/13 17:38
  */
 public class WeixinPayUtils {
-
-
     /**
      * 解析XML内容
      */

@@ -25,7 +25,7 @@
         <spring.version>4.1.1.RELEASE</spring.version>
         <spring-data-jpa.version>1.8.2.RELEASE</spring-data-jpa.version>
 
-        <druid.version>1.0.14</druid.version>
+        <druid.version>1.0.15</druid.version>
 
         <validation-api.version>1.1.0.Final</validation-api.version>
         <hibernate-validator.version>5.0.3.Final</hibernate-validator.version>

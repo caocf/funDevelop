@@ -11,39 +11,23 @@ import java.util.Date;
  * <a href="mailto:yangmujiang@sohu.com">Reamy(杨木江)</a> 创建于 2016/5/14 2:07
  */
 @Entity
-@Table(name = "fun_fin_payment_notify_record")
+@Table(name = "fun_payment_notify_record")
 public class PaymentNotifyRecordEntity extends LongIDEntity {
-    /**
-     * 订单类型
-     */
+    /** 订单类型 */
     private String orderType;
-    /**
-     * 支付平台的订单号码
-     */
+    /** 支付平台的订单号码 */
     private String platformOrderNo;
-    /**
-     * 订单编号
-     */
+    /** 订单编号 */
     private String orderNo;
-    /**
-     * 支付方式
-     */
-    private String paymentMode;
-    /**
-     * 通知类型
-     */
+    /** 支付平台. */
+    private String platform;
+    /** 通知类型 */
     private String notifyType;
-    /**
-     * 通知时间
-     */
+    /** 通知时间 */
     private Date notifyTime;
-    /**
-     * 通知内容（报文，建议用JSON格式保存）
-     */
+    /** 通知内容（报文，建议用JSON格式保存） */
     private String notifyContent;
-    /**
-     * 服务器响应内容
-     */
+    /** 服务器响应内容 */
     private String returnContent;
 
     public String getOrderType() {
@@ -70,12 +54,12 @@ public class PaymentNotifyRecordEntity extends LongIDEntity {
         this.orderNo = orderNo;
     }
 
-    public String getPaymentMode() {
-        return paymentMode;
+    public String getPlatform() {
+        return platform;
     }
 
-    public void setPaymentMode(String paymentMode) {
-        this.paymentMode = paymentMode;
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public String getNotifyType() {

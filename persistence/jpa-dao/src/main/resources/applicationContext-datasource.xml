@@ -35,7 +35,7 @@
         <property name="timeBetweenEvictionRunsMillis" value="900000" />
         <property name="minEvictableIdleTimeMillis" value="1800000" />
 
-        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="validationQuery" value="${jdbc.validationQuery}" />
         <property name="testWhileIdle" value="true" />
         <property name="testOnBorrow" value="false" />
         <property name="testOnReturn" value="false" />
@@ -63,7 +63,7 @@
         <property name="timeBetweenEvictionRunsMillis" value="900000" />
         <property name="minEvictableIdleTimeMillis" value="1800000" />
 
-        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="validationQuery" value="${jdbc.validationQuery}" />
         <property name="testWhileIdle" value="true" />
         <property name="testOnBorrow" value="false" />
         <property name="testOnReturn" value="false" />

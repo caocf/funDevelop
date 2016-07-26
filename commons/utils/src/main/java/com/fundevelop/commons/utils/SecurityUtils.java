@@ -45,6 +45,8 @@ public class SecurityUtils {
     public static final String LOGIN_FAIL_INVALID_ACCOUNT = "1";
     /** 用户被禁用 */
     public static final String LOGIN_FAIL_DISABLED = "2";
+    /** 验证码错误 */
+    public static final String LOGIN_FAIL_INVALID_CAPTCHA = "3";
 
     private SecurityUtils(){}
 }
