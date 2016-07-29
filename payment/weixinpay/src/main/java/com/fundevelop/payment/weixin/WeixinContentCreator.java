@@ -68,7 +68,6 @@ public class WeixinContentCreator implements PaymentContentCreator {
             }
 
             PayReqData payReqData = new PayReqData(appId, mchId, prepayId);
-            payReqData.setNoncestr(prePayReqData.getNonce_str());
 
             Signature.sign(payReqData);
 

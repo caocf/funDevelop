@@ -57,9 +57,16 @@ public abstract class BaseController<T extends BaseEntity<ID>, ID extends Serial
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public void delete(String ids) {
-        beforeDelete(ids);
-        getManager().batchDelete(ids);
+    public boolean delete(String ids) {
+        try {
+            beforeDelete(ids);
+            getManager().batchDelete(ids);
+        } catch (Exception ex) {
+            logger.error("删除记录失败", ex);
+            return false;
+        }
+
+        return true;
     }
 
     /**

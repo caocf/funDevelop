@@ -155,7 +155,20 @@ public class QueryBuilder {
 
         sql.append(sortSql);
 
-        Query query = entityManager.createNativeQuery(sql.toString());
+        Map<String, Object> paramsMap = new HashMap<>(params.size());
+
+        for (int i=0; i<params.size(); i++) {
+            paramsMap.put("param"+(i+1), params.get(i));
+        }
+
+        return createQuery(sql.toString(), paramsMap);
+    }
+
+    /**
+     * 创建查询对象.
+     */
+    public Query createQuery(String sql, Map<String, Object> params) {
+        Query query = entityManager.createNativeQuery(sql);
 
         query.unwrap(SQLQuery.class).setResultTransformer(new ResultTransformer() {
             @Override
@@ -180,8 +193,10 @@ public class QueryBuilder {
             }
         });
 
-        for (int i=0; i<params.size(); i++) {
-            query.setParameter("param"+(i+1), params.get(i));
+        if (params != null && !params.isEmpty()) {
+            for (String param : params.keySet()) {
+                query.setParameter(param, params.get(param));
+            }
         }
 
         return query;

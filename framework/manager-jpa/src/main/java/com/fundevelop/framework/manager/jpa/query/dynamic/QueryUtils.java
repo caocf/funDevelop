@@ -15,6 +15,7 @@ import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -167,6 +168,42 @@ public class QueryUtils {
 
             return new PageImpl<T>(content, pageable, total);
         }
+    }
+
+    /**
+     * 执行原生SQL查询.
+     */
+    public static <T extends BaseEntity<?>> List<T> doNativeQuery(String sql, EntityManager entityManager, Class<T> returnType) {
+        return doNativeQuery(sql, null, null, entityManager, returnType);
+    }
+
+    /**
+     * 执行原生SQL查询.
+     */
+    public static <T extends BaseEntity<?>> List<T> doNativeQuery(String sql, Pageable pageable, EntityManager entityManager, Class<T> returnType) {
+        return doNativeQuery(sql, null, pageable, entityManager, returnType);
+    }
+
+    /**
+     * 执行原生SQL查询.
+     */
+    public static <T extends BaseEntity<?>> List<T> doNativeQuery(String sql, Map<String, Object> params, EntityManager entityManager, Class<T> returnType) {
+        return doNativeQuery(sql, params, null, entityManager, returnType);
+    }
+
+    /**
+     * 执行原生SQL查询.
+     */
+    public static <T extends BaseEntity<?>> List<T> doNativeQuery(String sql, Map<String, Object> params, Pageable pageable, EntityManager entityManager, Class<T> returnType) {
+        QueryBuilder queryBuilder = QueryBuilder.getQueryBuilder(entityManager, returnType);
+        Query query = queryBuilder.createQuery(sql, params);
+
+        if (pageable != null) {
+            query.setFirstResult(pageable.getOffset());
+            query.setMaxResults(pageable.getPageSize());
+        }
+
+        return query.getResultList();
     }
 
     /** 查询计划参数名称. */
