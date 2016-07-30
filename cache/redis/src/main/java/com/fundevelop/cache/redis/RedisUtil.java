@@ -33,6 +33,35 @@ public class RedisUtil {
     /** Redis连接池. */
     private static ShardedJedisPool shardedJedisPool;
 
+    /**
+     * 获取序列号.
+     * @param key 序列号将名称
+     */
+    public static Long getSequenceNo(String key) {
+        return getSequenceNo(key, 0);
+    }
+
+    /**
+     * 获取序列号.
+     * @param key 序列号将名称
+     * @param startNo 起始值
+     */
+    public static Long getSequenceNo(String key, long startNo) {
+        try {
+            ShardedJedis jedis = getJedis();
+
+            if (!jedis.exists(key)) {
+                jedis.set(key, startNo+"");
+            }
+
+            return jedis.incr(key);
+        } catch (Exception ex) {
+            returnBrokenResource();
+            logger.error("redis:getSequenceNo error, key: {}", key, ex);
+            throw new RuntimeException("Redis操作失败！", ex);
+        }
+    }
+
     public static Long setnx(String key, String value) {
         try {
             ShardedJedis jedis = getJedis();
