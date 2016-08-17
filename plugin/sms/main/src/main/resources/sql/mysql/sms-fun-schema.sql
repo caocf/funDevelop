@@ -3,7 +3,7 @@ commit;
 
 CREATE TABLE `fun_sms` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `country_code` varchar(5) NOT NULL DEFAULT '86' COMMENT '国家代码',
+  `country_code` varchar(5) DEFAULT NULL COMMENT '国家代码',
   `phone` varchar(30) DEFAULT NULL COMMENT '手机号码',
   `content` varchar(500) NOT NULL COMMENT '短信内容',
   `create_time` datetime NOT NULL COMMENT '创建时间',

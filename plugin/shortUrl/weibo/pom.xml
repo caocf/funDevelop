@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fundevelop-plugin-shortUrl</artifactId>
+        <groupId>fundevelop.plugin</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fundevelop.plugin.shorturl</groupId>
+    <artifactId>fundevelop-plugin-shorturl-weibo</artifactId>
+    <packaging>jar</packaging>
+    <name>快速开发::插件::短链接::新浪微博</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>1.7</jdk.version>
+
+        <!-- framework -->
+        <fundevelop.framework.version>1.0.0-SNAPSHOT</fundevelop.framework.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fundevelop.commons</groupId>
+            <artifactId>fundevelop-commons-web-utils</artifactId>
+            <version>${fundevelop.framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fundevelop.cache</groupId>
+            <artifactId>fundevelop-cache-redis</artifactId>
+            <version>${fundevelop.framework.version}</version>
+        </dependency>
+    </dependencies>
+</project>

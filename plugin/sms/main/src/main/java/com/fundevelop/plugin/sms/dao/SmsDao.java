@@ -14,24 +14,24 @@ public interface SmsDao extends BaseDao<SmsEntity, Long> {
     /**
      * 获取待发送短信.
      */
-    @Query(value = "select * from sys_sms where status='1' and send_time is null " +
-            "union select * from sys_sms where status='1' and send_time<date_add(now(),interval 5 SECOND) " +
+    @Query(value = "select * from fun_sms where status='1' and send_time is null " +
+            "union select * from fun_sms where status='1' and send_time<date_add(now(),interval 5 SECOND) " +
             "order by priority desc,create_time asc", nativeQuery = true)
     List<SmsEntity> findWaitSendSms();
 
     /**
      * 获取待发送短信.
      */
-    @Query(value = "select * from sys_sms where status='1' and system=?1 and send_time is null " +
-            "union select * from sys_sms where status='1' and system=?1 and send_time<date_add(now(),interval 5 SECOND) " +
+    @Query(value = "select * from fun_sms where status='1' and system=?1 and send_time is null " +
+            "union select * from fun_sms where status='1' and system=?1 and send_time<date_add(now(),interval 5 SECOND) " +
             "order by priority desc,create_time asc", nativeQuery = true)
     List<SmsEntity> findWaitSendSms(String system);
 
     /**
      * 获取待发送短信.
      */
-    @Query(value = "select * from sys_sms where status='1' and system=?1 and module=?2 and send_time is null " +
-            "union select * from sys_sms where status='1' and system=?1 and module=?2 and send_time<date_add(now(),interval 5 SECOND) " +
+    @Query(value = "select * from fun_sms where status='1' and system=?1 and module=?2 and send_time is null " +
+            "union select * from fun_sms where status='1' and system=?1 and module=?2 and send_time<date_add(now(),interval 5 SECOND) " +
             "order by priority desc,create_time asc", nativeQuery = true)
     List<SmsEntity> findWaitSendSms(String system, String module);
 }

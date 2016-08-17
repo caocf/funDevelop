@@ -1,5 +1,7 @@
 package com.fundevelop.plugin.sms;
 
+import com.fundevelop.framework.base.listener.SpringContextHolder;
+import com.fundevelop.plugin.sms.impl.DefaultEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +17,8 @@ public class SmsEventNotifyHandle {
      * @param channelCode 通道代码
      */
     public static void sendSucess(String smsId, String msgId, String channelCode) {
+        getDefaultListener().sendSucessEvent(smsId, msgId, channelCode);
+
         if (eventListener != null) {
             eventListener.sendSucessEvent(smsId, msgId, channelCode);
         } else {
@@ -28,6 +32,8 @@ public class SmsEventNotifyHandle {
      * @param channelCode 通道代码
      */
     public static void sendFail(Sms sms, String channelCode, String message) {
+        getDefaultListener().sendFailEvent(sms,channelCode, message);
+
         if (eventListener != null) {
             eventListener.sendFailEvent(sms,channelCode, message);
         } else {
@@ -39,8 +45,17 @@ public class SmsEventNotifyHandle {
         SmsEventNotifyHandle.eventListener = eventListener;
     }
 
+    private static SmsEventListener getDefaultListener() {
+        if (defaultListener == null) {
+            defaultListener = SpringContextHolder.getBean(DefaultEventListener.class);
+        }
+
+        return defaultListener;
+    }
+
     /** 短信事件监听器 */
     private static SmsEventListener eventListener;
+    private static SmsEventListener defaultListener;
 
     private static Logger logger = LoggerFactory.getLogger(SmsEventNotifyHandle.class);
 

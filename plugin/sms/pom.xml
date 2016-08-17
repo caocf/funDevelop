@@ -13,13 +13,15 @@
     <artifactId>fundevelop-plugin-sms</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <name>快速开发::插件::短信</name>
+
     <modules>
         <module>main</module>
         <module>ctcSmsCloud</module>
         <module>ihuyi</module>
         <module>jianzhou</module>
+        <module>isms360</module>
     </modules>
-    <name>快速开发::插件::短信</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

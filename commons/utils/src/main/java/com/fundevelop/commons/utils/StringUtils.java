@@ -134,5 +134,16 @@ public class StringUtils {
         return source;
     }
 
+    /**
+     * 去除url地址中的http://头并在前后加空格.
+     */
+    public static String formatUrlForSms(String url) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(url)) {
+            return url.replace("http://", " ") + " ";
+        }
+
+        return url;
+    }
+
     private StringUtils(){}
 }

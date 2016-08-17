@@ -162,6 +162,10 @@ public class SearchSpecification<T> implements Specification<T> {
                 return builder.like(expression, "%" + filter.value + "%");
             case NC:
                 return builder.notLike(expression, "%" + filter.value + "%");
+            case LL:
+                return builder.like(expression, filter.value + "%");
+            case RL:
+                return builder.like(expression, "%" + filter.value);
             case NU:
                 return builder.isNull(expression);
             case NN:

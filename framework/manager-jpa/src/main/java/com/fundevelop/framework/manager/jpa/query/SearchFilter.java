@@ -23,13 +23,15 @@ public class SearchFilter {
      * { oper:'NI', text:'not in'},
      * { oper:'CN', text:'like'},
      * { oper:'NC', text:'not like'},
+     * { oper:'LL', text:'like keyword%'},
+     * { oper:'RL', text:'like %keyword'},
      * { oper:'NU', text:'is null'},
      * { oper:'NN', text:'is not null'},
      * { oper:'BLANK', text:'='''},
      * { oper:'NBLANK', text:'!='''}
      */
     public enum Operator {
-        EQ, NE, LT, LE, GT, GE, IN, NI, CN, NC, NU, NN, BLANK, NBLANK
+        EQ, NE, LT, LE, GT, GE, IN, NI, CN, NC, LL, RL, NU, NN, BLANK, NBLANK
     }
 
     /** 字段名称. */

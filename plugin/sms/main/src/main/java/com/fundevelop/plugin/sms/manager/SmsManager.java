@@ -1,10 +1,13 @@
 package com.fundevelop.plugin.sms.manager;
 
 import com.fundevelop.framework.manager.jpa.AbstractManager;
+import com.fundevelop.plugin.sms.SmsReport;
 import com.fundevelop.plugin.sms.dao.SmsDao;
 import com.fundevelop.plugin.sms.entity.SmsEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +36,25 @@ public class SmsManager extends AbstractManager<SmsEntity, Long, SmsDao> {
      */
     public List<SmsEntity> findWaitSendSms(String system, String module) {
         return getDao().findWaitSendSms(system, module);
+    }
+
+    /**
+     * 接收到发送短信回执.
+     * @param sendReport 短信发送回执
+     */
+    @Transactional
+    public void accessSendReport(SmsReport sendReport) {
+        if (sendReport != null && StringUtils.isNotBlank(sendReport.getMsgId())) {
+            SmsEntity smsEntity = findUniqueBy("rrid", sendReport.getMsgId());
+
+            if (smsEntity != null) {
+                smsEntity.setResponseStatus(sendReport.getStatus());
+                smsEntity.setResponseTime(sendReport.getResponseTime());
+                smsEntity.setServiceCode(sendReport.getServiceCode());
+
+                save(smsEntity);
+            }
+        }
     }
 
     @Override

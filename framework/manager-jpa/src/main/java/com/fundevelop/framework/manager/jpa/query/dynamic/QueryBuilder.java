@@ -889,6 +889,12 @@ public class QueryBuilder {
             case NC:
                 whereEpr = notLike(fieldName, "%" + filter.value + "%");
                 break;
+            case LL:
+                whereEpr = like(fieldName, filter.value + "%");
+                break;
+            case RL:
+                whereEpr = like(fieldName, "%" + filter.value);
+                break;
             case NU:
                 whereEpr = isNull(fieldName);
                 break;

@@ -23,7 +23,7 @@ public class JianZhouSmsChannel extends AbstractSmsChannel {
             content = signContent(sms.getContent());
 
             if (StringUtils.isNotBlank(phones) && StringUtils.isNotBlank(content)) {
-                sendRes = client.sendBatchMessage(getAccount(), getPassword(), phones, content);
+                sendRes = getClient().sendBatchMessage(getAccount(), getPassword(), phones, content);
 
                 logger.debug("使用建周科技发送短信：手机号：{}，短信内容：{}，返回结果：{}", phones, content, sendRes);
 
