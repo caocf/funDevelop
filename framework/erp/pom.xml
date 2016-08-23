@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>fundevelop-framework</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.framework</groupId>
     <artifactId>fundevelop-framework-erp</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>快速开发::框架::ERP</name>
 
     <properties>
@@ -18,9 +20,9 @@
         <jdk.version>1.7</jdk.version>
 
         <!-- framework -->
-        <fundevelop-framework-service-base.version>1.0.1-SNAPSHOT</fundevelop-framework-service-base.version>
-        <fundevelop-framework-manager-jpa.version>1.0.1-SNAPSHOT</fundevelop-framework-manager-jpa.version>
-        <fundevelop-cache-redis.version>1.0.1-SNAPSHOT</fundevelop-cache-redis.version>
+        <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
+        <fundevelop-framework-manager-jpa.version>1.0.0-SNAPSHOT</fundevelop-framework-manager-jpa.version>
+        <fundevelop-cache-redis.version>1.0.0-SNAPSHOT</fundevelop-cache-redis.version>
 
         <!-- web -->
         <servlet-api.version>2.5</servlet-api.version>
