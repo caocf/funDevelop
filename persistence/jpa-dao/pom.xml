@@ -3,22 +3,22 @@
     <parent>
         <artifactId>fundevelop-persistence</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.persistence</groupId>
     <artifactId>fundevelop-persistence-jpa-dao</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>快速开发::持久化::DAO::JPA</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
 
-        <fundevelop-persistence-entity.version>1.0.0</fundevelop-persistence-entity.version>
-        <fundevelop-commons-web-utils.version>1.0.0</fundevelop-commons-web-utils.version>
+        <fundevelop-persistence-entity.version>1.0.1-SNAPSHOT</fundevelop-persistence-entity.version>
+        <fundevelop-commons-web-utils.version>1.0.1-SNAPSHOT</fundevelop-commons-web-utils.version>
 
         <spring.version>4.1.1.RELEASE</spring.version>
         <spring-data-jpa.version>1.8.2.RELEASE</spring-data-jpa.version>

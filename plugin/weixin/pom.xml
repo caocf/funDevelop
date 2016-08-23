@@ -3,14 +3,14 @@
     <parent>
         <artifactId>fundevelop-plugin</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.plugin</groupId>
     <artifactId>fundevelop-plugin-weixin</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>快速开发::插件::微信</name>
 
     <properties>
@@ -18,7 +18,7 @@
         <jdk.version>1.7</jdk.version>
 
         <!-- commons -->
-        <fundevelop-commons-web-utils.version>1.0.0</fundevelop-commons-web-utils.version>
+        <fundevelop-commons-web-utils.version>1.0.1-SNAPSHOT</fundevelop-commons-web-utils.version>
     </properties>
 
     <dependencies>

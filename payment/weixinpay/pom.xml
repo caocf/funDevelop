@@ -3,14 +3,14 @@
     <parent>
         <artifactId>fundevelop-payment</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.payment</groupId>
     <artifactId>fundevelop-payment-weixinpay</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>快速开发::支付::微信</name>
 
     <properties>
@@ -20,7 +20,7 @@
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 
         <!-- framework -->
-        <fundevelop-payment.version>1.0.0</fundevelop-payment.version>
+        <fundevelop-payment.version>1.0.1-SNAPSHOT</fundevelop-payment.version>
     </properties>
 
     <dependencies>
