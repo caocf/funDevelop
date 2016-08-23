@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>fundevelop-persistence</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.persistence</groupId>
     <artifactId>fundevelop-persistence-hibernate-entity</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>快速开发::持久化::实体::hibernate</name>
 
     <properties>
@@ -18,7 +20,7 @@
         <jdk.version>1.7</jdk.version>
 
         <!-- commons -->
-        <fundevelop-commons-utils.version>1.0.0</fundevelop-commons-utils.version>
+        <fundevelop-commons-utils.version>1.0.0-SNAPSHOT</fundevelop-commons-utils.version>
 
         <hibernate.version>4.3.6.Final</hibernate.version>
     </properties>

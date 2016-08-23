@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>fundevelop-cache</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.cache</groupId>
     <artifactId>fundevelop-cache-redis</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>快速开发::缓存::Redis</name>
 
     <properties>
@@ -18,7 +20,7 @@
         <jdk.version>1.7</jdk.version>
 
         <!-- framework -->
-        <fundevelop-framework-service-base.version>1.0.0</fundevelop-framework-service-base.version>
+        <fundevelop-framework-service-base.version>1.0.0-SNAPSHOT</fundevelop-framework-service-base.version>
 
         <!-- cache -->
         <jedis.version>2.7.2</jedis.version>
