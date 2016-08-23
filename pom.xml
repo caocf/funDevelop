@@ -4,7 +4,7 @@
 
     <groupId>fundevelop</groupId>
     <artifactId>fundevelop</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>快速开发基础</name>
     <description>定义底层架构的依赖组件及基础实现</description>
@@ -22,7 +22,7 @@
         <connection>scm:git:git@github.com:funDevelop/funDevelop.git</connection>
         <url>scm:git:git@github.com:funDevelop/funDevelop.git</url>
         <developerConnection>scm:git:git@github.com:funDevelop/funDevelop.git</developerConnection>
-        <tag>fundevelop-1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>

@@ -3,21 +3,21 @@
     <parent>
         <artifactId>fundevelop-framework</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.framework</groupId>
     <artifactId>fundevelop-framework-manager-jpa</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>快速开发::框架::Manager</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
 
-        <fundevelop-persistence-dao.version>1.0.0</fundevelop-persistence-dao.version>
+        <fundevelop-persistence-dao.version>1.0.1-SNAPSHOT</fundevelop-persistence-dao.version>
     </properties>
 
     <dependencies>

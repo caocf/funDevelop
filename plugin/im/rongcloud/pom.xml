@@ -3,7 +3,7 @@
     <parent>
         <artifactId>fundevelop-plugin</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -11,7 +11,7 @@
     <groupId>fundevelop.plugin.im</groupId>
     <artifactId>fundevelop-plugin-rongcloud</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>快速开发::插件::IM::融云</name>
 
     <properties>
@@ -19,7 +19,7 @@
         <jdk.version>1.7</jdk.version>
 
         <!-- commons -->
-        <fundevelop-commons-web-utils.version>1.0.0</fundevelop-commons-web-utils.version>
+        <fundevelop-commons-web-utils.version>1.0.1-SNAPSHOT</fundevelop-commons-web-utils.version>
     </properties>
 
     <dependencies>

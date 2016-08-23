@@ -3,14 +3,14 @@
     <parent>
         <artifactId>fundevelop-commons</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fundevelop.commons</groupId>
     <artifactId>fundevelop-commons-utils</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>快速开发::工具辅助::Utils</name>
 
     <properties>

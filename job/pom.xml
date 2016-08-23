@@ -3,14 +3,14 @@
     <parent>
         <artifactId>fundevelop</artifactId>
         <groupId>fundevelop</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fundevelop-job</artifactId>
     <packaging>pom</packaging>
     <name>快速开发::JOB</name>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <modules>
         <module>quartz</module>
     </modules>
